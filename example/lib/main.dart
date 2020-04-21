@@ -22,8 +22,11 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: CalendarTimeline(
-          actualDate: DateTime.now(),
-          onDaySelected: (date) => print(date),
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2019, 1, 1),
+          lastDate: DateTime(2020, 12, 31),
+          onDateSelected: (date) => print(date),
+          leftMargin: 20,
         ),
       )
     );

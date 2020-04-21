@@ -1,14 +1,18 @@
-# calendartimeline
+# calendar_timeline
 
-Flutter widget form select a date in horizontal timeline.
+Flutter widget form select a date in horizontal timeline with customizable styles.
 
 ## Getting Started
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+You can use this package when you need to add a date selector to your application.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Properties
+
+
+## Use example
+
+You can review the example folder for a complete example of using the widget.
+
+```
+
+```
