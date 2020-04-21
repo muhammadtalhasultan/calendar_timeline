@@ -43,8 +43,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   final double _dayItemExtend = 60.0;
 
-  final _actualYear = DateTime.now().year;
-
   int _monthSelectedIndex;
   int _daySelectedIndex;
   double _scrollMonthAlignment;
@@ -135,10 +133,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     );
   }
 
-  _generateDays(DateTime time) {
+  _generateDays(DateTime date) {
+    _days.clear();
     for (var i = 1; i <= 31; i++) {
-      final newDay = DateTime(_actualYear, time.month, i);
-      if (newDay.month != time.month) break;
+      final newDay = DateTime(date.year, date.month, i);
+      if (newDay.month != date.month) break;
       _days.add(newDay);
     }
   }
@@ -151,8 +150,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     }
   }
 
-  _resetCalendar(int month) {
-    _generateDays(DateTime(_actualYear, month));
+  _resetCalendar(DateTime date) {
+    _generateDays(date);
     _daySelectedIndex = null;
     _controllerDay.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
   }
@@ -167,7 +166,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         curve: Curves.easeIn,
       );
     }
-    _resetCalendar(index);
+    _resetCalendar(_months[index]);
     setState(() {});
   }
 
