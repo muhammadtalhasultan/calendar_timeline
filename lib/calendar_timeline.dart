@@ -133,12 +133,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     );
   }
 
-  _generateDays(DateTime date) {
+  _generateDays(DateTime selectedMonth) {
     _days.clear();
     for (var i = 1; i <= 31; i++) {
-      final newDay = DateTime(date.year, date.month, i);
-      if (newDay.month != date.month) break;
-      _days.add(newDay);
+      final day = DateTime(selectedMonth.year, selectedMonth.month, i);
+      if (day.isBefore(widget.firstDate)) continue;
+      if (day.month != selectedMonth.month || day.isAfter(widget.lastDate)) break;
+      _days.add(day);
     }
   }
 
@@ -191,10 +192,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _generateMonths();
     _generateDays(widget.initialDate);
     _monthSelectedIndex = widget.initialDate.month;
+    _daySelectedIndex = widget.initialDate.day - 1;
     _controllerDay = ScrollController(
-      initialScrollOffset: widget.initialDate.day * _dayItemExtend,
+      initialScrollOffset:_daySelectedIndex * _dayItemExtend,
     );
-    _daySelectedIndex = widget.initialDate.day;
   }
 }
 

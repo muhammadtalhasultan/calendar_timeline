@@ -23,8 +23,8 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: CalendarTimeline(
           initialDate: DateTime.now(),
-          firstDate: DateTime(2019, 1, 1),
-          lastDate: DateTime(2020, 12, 31),
+          firstDate: DateTime(2019, 1, 15),
+          lastDate: DateTime(2020, 11, 20),
           onDateSelected: (date) => print(date),
           leftMargin: 20,
         ),
