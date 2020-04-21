@@ -204,7 +204,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _initCalendar() {
     _generateMonths();
     _generateDays(widget.initialDate);
-    _monthSelectedIndex = widget.initialDate.month;
+    _monthSelectedIndex = _months.indexOf(
+      _months.firstWhere((monthDate) => monthDate.year == widget.initialDate.year
+        && monthDate.month == widget.initialDate.month)
+    );
     _daySelectedIndex = widget.initialDate.day - 1;
     _controllerDay = ScrollController(
       initialScrollOffset:_daySelectedIndex * _dayItemExtend,
