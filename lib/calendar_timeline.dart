@@ -11,24 +11,32 @@ class CalendarTimeline extends StatefulWidget {
   final SelectableDayPredicate selectableDayPredicate;
   final OnDateSelected onDateSelected;
   final double leftMargin;
+  final Color dayColor;
+  final Color activeDayColor;
+  final Color activeBackgroundDayColor;
+  final Color monthColor;
 
-  CalendarTimeline(
-      {Key key,
-      @required this.initialDate,
-      @required this.firstDate,
-      @required this.lastDate,
-      @required this.onDateSelected,
-      this.selectableDayPredicate,
-      this.leftMargin = 0})
-      : assert(initialDate != null),
-        assert(firstDate != null),
-        assert(lastDate != null),
-        assert(!initialDate.isBefore(firstDate), 'initialDate must be on or after firstDate'),
-        assert(!initialDate.isAfter(lastDate), 'initialDate must be on or before lastDate'),
-        assert(!firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate'),
-        assert(selectableDayPredicate == null || selectableDayPredicate(initialDate),
-            'Provided initialDate must satisfy provided selectableDayPredicate'),
-        super(key: key);
+  CalendarTimeline({Key key,
+    @required this.initialDate,
+    @required this.firstDate,
+    @required this.lastDate,
+    @required this.onDateSelected,
+    this.selectableDayPredicate,
+    this.leftMargin = 0,
+    this.dayColor,
+    this.activeDayColor,
+    this.activeBackgroundDayColor,
+    this.monthColor
+  })
+    : assert(initialDate != null),
+      assert(firstDate != null),
+      assert(lastDate != null),
+      assert(!initialDate.isBefore(firstDate), 'initialDate must be on or after firstDate'),
+      assert(!initialDate.isAfter(lastDate), 'initialDate must be on or before lastDate'),
+      assert(!firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate'),
+      assert(selectableDayPredicate == null || selectableDayPredicate(initialDate),
+      'Provided initialDate must satisfy provided selectableDayPredicate'),
+      super(key: key);
 
   @override
   _CalendarTimelineState createState() => _CalendarTimelineState();
@@ -82,6 +90,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
             isSelected: _daySelectedIndex == index,
             dayNumber: _days[index].day,
             shortName: _formatterDay.format(_days[index]).capitalize().substring(0, 2),
+            textColor: widget.dayColor,
+            activeTextColor: widget.activeDayColor,
+            activeBackgroundColor: widget.activeBackgroundDayColor,
             onTap: () => _goToActualDay(index),
           );
         },
@@ -116,7 +127,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                       DateFormat.y().format(currentDate).substring(2),
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
-                        fontSize: 20
+                        fontSize: 20,
+                        color: widget.monthColor,
                       ),
                     ),
                   ),
@@ -124,6 +136,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                   isSelected: _monthSelectedIndex == index,
                   name: _formatterMonth.format(currentDate),
                   onTap: () => _goToActualMonth(index),
+                  color: widget.monthColor,
                 ),
               ],
             ),
@@ -203,8 +216,9 @@ class MonthName extends StatelessWidget {
   final String name;
   final Function onTap;
   final bool isSelected;
+  final Color color;
 
-  MonthName({this.name, this.onTap, this.isSelected});
+  MonthName({this.name, this.onTap, this.isSelected, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -214,6 +228,7 @@ class MonthName extends StatelessWidget {
         this.name.toUpperCase(),
         style: TextStyle(
           fontSize: 14,
+          color: color ?? Colors.black87,
           fontWeight: this.isSelected ? FontWeight.bold : FontWeight.w300,
         ),
       ),
@@ -226,14 +241,20 @@ class _DayItem extends StatelessWidget {
   final String shortName;
   final bool isSelected;
   final Function onTap;
+  final Color textColor;
+  final Color activeTextColor;
+  final Color activeBackgroundColor;
 
-  const _DayItem(
-      {Key key,
-      @required this.dayNumber,
-      @required this.shortName,
-      @required this.isSelected,
-      @required this.onTap})
-      : super(key: key);
+  const _DayItem({Key key,
+    @required this.dayNumber,
+    @required this.shortName,
+    @required this.isSelected,
+    @required this.onTap,
+    this.textColor,
+    this.activeTextColor,
+    this.activeBackgroundColor,
+  })
+    : super(key: key);
 
   final double height = 70.0;
   final double width = 60.0;
@@ -243,7 +264,7 @@ class _DayItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: activeBackgroundColor ?? Theme.of(context).accentColor,
           borderRadius: BorderRadius.circular(12.0),
         ),
         height: height,
@@ -254,29 +275,15 @@ class _DayItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Container(
-                  height: 5,
-                  width: 5,
-                  decoration: new BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                Container(
-                  height: 5,
-                  width: 5,
-                  decoration: new BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                _buildDot(),
+                _buildDot(),
               ],
             ),
             SizedBox(height: 12),
             Text(
               dayNumber.toString(),
               style: TextStyle(
-                color: Colors.white,
+                color: activeTextColor ?? Colors.white,
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
                 height: 0.8,
@@ -285,13 +292,24 @@ class _DayItem extends StatelessWidget {
             Text(
               shortName,
               style: TextStyle(
-                color: Colors.white,
+                color: activeTextColor ?? Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDot() {
+    return Container(
+      height: 5,
+      width: 5,
+      decoration: new BoxDecoration(
+        color: activeTextColor ?? Colors.white,
+        shape: BoxShape.circle,
       ),
     );
   }
@@ -308,7 +326,7 @@ class _DayItem extends StatelessWidget {
             Text(
               dayNumber.toString(),
               style: TextStyle(
-                  color: Theme.of(context).accentColor,
+                  color: textColor ?? Theme.of(context).accentColor,
                   fontSize: 32,
                   fontWeight: FontWeight.normal),
             ),

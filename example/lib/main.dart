@@ -27,6 +27,10 @@ class HomePage extends StatelessWidget {
           lastDate: DateTime(2020, 11, 20),
           onDateSelected: (date) => print(date),
           leftMargin: 20,
+          monthColor: Colors.blueGrey,
+          dayColor: Colors.teal[200],
+          activeDayColor: Colors.white,
+          activeBackgroundDayColor: Colors.redAccent[100],
         ),
       )
     );
