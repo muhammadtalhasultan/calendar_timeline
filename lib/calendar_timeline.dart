@@ -86,14 +86,18 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         itemExtent: _dayItemExtend,
         padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
         itemBuilder: (BuildContext context, int index) {
+
+          final currentDay = _days[index];
+
           return _DayItem(
             isSelected: _daySelectedIndex == index,
             dayNumber: _days[index].day,
-            shortName: _formatterDay.format(_days[index]).capitalize().substring(0, 2),
+            shortName: _formatterDay.format(currentDay).capitalize().substring(0, 2),
             textColor: widget.dayColor,
             activeTextColor: widget.activeDayColor,
             activeBackgroundColor: widget.activeBackgroundDayColor,
             onTap: () => _goToActualDay(index),
+            available: widget.selectableDayPredicate == null ? true : widget.selectableDayPredicate(currentDay)
           );
         },
       ),
@@ -247,6 +251,7 @@ class _DayItem extends StatelessWidget {
   final Color textColor;
   final Color activeTextColor;
   final Color activeBackgroundColor;
+  final bool available;
 
   const _DayItem({Key key,
     @required this.dayNumber,
@@ -256,6 +261,7 @@ class _DayItem extends StatelessWidget {
     this.textColor,
     this.activeTextColor,
     this.activeBackgroundColor,
+    this.available = true,
   })
     : super(key: key);
 
@@ -263,45 +269,42 @@ class _DayItem extends StatelessWidget {
   final double width = 60.0;
 
   _activeDay(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: activeBackgroundColor ?? Theme.of(context).accentColor,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        height: height,
-        width: width,
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 7),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _buildDot(),
-                _buildDot(),
-              ],
+    return Container(
+      decoration: BoxDecoration(
+        color: activeBackgroundColor ?? Theme.of(context).accentColor,
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      height: height,
+      width: width,
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 7),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _buildDot(),
+              _buildDot(),
+            ],
+          ),
+          SizedBox(height: 12),
+          Text(
+            dayNumber.toString(),
+            style: TextStyle(
+              color: activeTextColor ?? Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              height: 0.8,
             ),
-            SizedBox(height: 12),
-            Text(
-              dayNumber.toString(),
-              style: TextStyle(
-                color: activeTextColor ?? Colors.white,
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                height: 0.8,
-              ),
+          ),
+          Text(
+            shortName,
+            style: TextStyle(
+              color: activeTextColor ?? Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
             ),
-            Text(
-              shortName,
-              style: TextStyle(
-                color: activeTextColor ?? Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -319,7 +322,7 @@ class _DayItem extends StatelessWidget {
 
   _passiveDay(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: available ? onTap : null,
       child: Container(
         height: height,
         width: width,
@@ -329,7 +332,9 @@ class _DayItem extends StatelessWidget {
             Text(
               dayNumber.toString(),
               style: TextStyle(
-                  color: textColor ?? Theme.of(context).accentColor,
+                  color: available
+                    ? textColor ?? Theme.of(context).accentColor
+                    : textColor?.withOpacity(0.5) ?? Theme.of(context).accentColor.withOpacity(0.5),
                   fontSize: 32,
                   fontWeight: FontWeight.normal),
             ),
