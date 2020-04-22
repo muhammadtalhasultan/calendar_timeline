@@ -127,11 +127,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                if (index == 0 || currentDate.month == 1)
+                if (widget.firstDate.year != currentDate.year && currentDate.month == 1)
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Text(
-                      DateFormat.y().format(currentDate).substring(2),
+                      DateFormat.y().format(currentDate),
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontSize: 20,
