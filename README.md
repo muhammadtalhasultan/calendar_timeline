@@ -1,6 +1,6 @@
-# Calendar Timeline
+![header.jpg](header.jpg)
 
-Flutter widget form select a date in horizontal timeline with customizable styles.
+**Flutter widget form select a date in horizontal timeline with customizable styles.**
 
 ## Getting Started
 
