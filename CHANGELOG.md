@@ -1,3 +1,9 @@
+## 0.3.0 - 22/04/2020
+
+* Add dotColor parameter
+* Show year with 4 digits and not show it like first element in month list
+* Fix design errors
+
 ## 0.2.0 - 22/04/2020
 
 * Show year in first element of month list

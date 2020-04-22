@@ -6,7 +6,7 @@ Flutter widget form select a date in horizontal timeline with customizable style
 
 You can use this package when you need to add a date picker that takes up little screen space, so we can always have it visible, and that facilitates use with one hand.
 
-![calendar_timeline_example.gif](calendar_timeline_example.gif)
+![example.gif](example.gif)
 
 ## Properties
 
@@ -22,6 +22,7 @@ You can use this package when you need to add a date picker that takes up little
 | dayColor                 | Color                  | Color for day list elements                                 |
 | activeDayColor           | Color                  | Color for selected day text                                 |
 | activeBackgroundDayColor | Color                  | Color for selected day background                           |
+| dotColor                 | Color                  | Color for top dots in select day                            |
 
 
 ## Use example
@@ -39,6 +40,7 @@ CalendarTimeline(
           dayColor: Colors.teal[200],
           activeDayColor: Colors.white,
           activeBackgroundDayColor: Colors.redAccent[100],
+          dotsColor: Color(0xFF333A47),
           selectableDayPredicate: (date) => date.day != 23,
         )
 ```

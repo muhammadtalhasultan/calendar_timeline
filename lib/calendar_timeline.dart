@@ -71,6 +71,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         _buildMonthList(),
         _buildDayList(),
@@ -95,9 +96,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
             isSelected: _daySelectedIndex == index,
             dayNumber: _days[index].day,
             shortName: _formatterDay.format(currentDay).capitalize().substring(0, 2),
-            textColor: widget.dayColor,
-            activeTextColor: widget.activeDayColor,
-            activeBackgroundColor: widget.activeBackgroundDayColor,
+            dayColor: widget.dayColor,
+            activeDayColor: widget.activeDayColor,
+            activeDayBackgroundColor: widget.activeBackgroundDayColor,
             onTap: () => _goToActualDay(index),
             available: widget.selectableDayPredicate == null ? true : widget.selectableDayPredicate(currentDay),
             dotsColor: widget.dotsColor,
@@ -253,9 +254,9 @@ class _DayItem extends StatelessWidget {
   final String shortName;
   final bool isSelected;
   final Function onTap;
-  final Color textColor;
-  final Color activeTextColor;
-  final Color activeBackgroundColor;
+  final Color dayColor;
+  final Color activeDayColor;
+  final Color activeDayBackgroundColor;
   final bool available;
   final Color dotsColor;
 
@@ -264,9 +265,9 @@ class _DayItem extends StatelessWidget {
     @required this.shortName,
     @required this.isSelected,
     @required this.onTap,
-    this.textColor,
-    this.activeTextColor,
-    this.activeBackgroundColor,
+    this.dayColor,
+    this.activeDayColor,
+    this.activeDayBackgroundColor,
     this.available = true,
     this.dotsColor
   })
@@ -278,7 +279,7 @@ class _DayItem extends StatelessWidget {
   _buildActiveDay(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: activeBackgroundColor ?? Theme.of(context).accentColor,
+        color: activeDayBackgroundColor ?? Theme.of(context).accentColor,
         borderRadius: BorderRadius.circular(12.0),
       ),
       height: height,
@@ -291,7 +292,7 @@ class _DayItem extends StatelessWidget {
           Text(
             dayNumber.toString(),
             style: TextStyle(
-              color: activeTextColor ?? Colors.white,
+              color: activeDayColor ?? Colors.white,
               fontSize: 32,
               fontWeight: FontWeight.bold,
               height: 0.8,
@@ -300,7 +301,7 @@ class _DayItem extends StatelessWidget {
           Text(
             shortName,
             style: TextStyle(
-              color: activeTextColor ?? Colors.white,
+              color: activeDayColor ?? Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
@@ -316,7 +317,7 @@ class _DayItem extends StatelessWidget {
       height: 5,
       width: 5,
       decoration: new BoxDecoration(
-        color: this.dotsColor ?? this.activeTextColor,
+        color: this.dotsColor ?? this.activeDayColor ?? Colors.white,
         shape: BoxShape.circle,
       ),
     );
@@ -340,8 +341,8 @@ class _DayItem extends StatelessWidget {
               dayNumber.toString(),
               style: TextStyle(
                   color: available
-                    ? textColor ?? Theme.of(context).accentColor
-                    : textColor?.withOpacity(0.5) ?? Theme.of(context).accentColor.withOpacity(0.5),
+                    ? dayColor ?? Theme.of(context).accentColor
+                    : dayColor?.withOpacity(0.5) ?? Theme.of(context).accentColor.withOpacity(0.5),
                   fontSize: 32,
                   fontWeight: FontWeight.normal),
             ),
