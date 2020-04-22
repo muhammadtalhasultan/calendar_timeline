@@ -1,25 +1,27 @@
-# calendar_timeline
+# Calendar Timeline
 
 Flutter widget form select a date in horizontal timeline with customizable styles.
 
 ## Getting Started
 
-You can use this package when you need to add a date selector to your application.
+You can use this package when you need to add a date picker that is always visible and manageable with just one finger.
+
+![calendar_timeline_example.gif](calendar_timeline_example.gif)
 
 ## Properties
 
-| Property                 | Type                   | Description |
-|:-------------------------|:-----------------------|:------------|
-| initialDate              | DateTime               |             |
-| firstDate                | DateTime               |             |
-| lastDate                 | DateTime               |             |
-| selectableDayPredicate   | SelectableDayPredicate |             |
-| onDateSelected           | OnDateSelected         |             |
-| leftMargin               | double                 |             |
-| monthColor               | Color                  |             |
-| dayColor                 | Color                  |             |
-| activeDayColor           | Color                  |             |
-| activeBackgroundDayColor | Color                  |             |
+| Property                 | Type                   | Description                                                 |
+|:-------------------------|:-----------------------|:------------------------------------------------------------|
+| initialDate              | DateTime               | Initial date selected                                       |
+| firstDate                | DateTime               | First date available in calendar                            |
+| lastDate                 | DateTime               | Last date available in calendar                             |
+| selectableDayPredicate   | SelectableDayPredicate | Signature for predicating dates for enabled date selections |
+| onDateSelected           | OnDateSelected         | Callback to notify that a date has been selected            |
+| leftMargin               | double                 | Left margin to month and day list                           |
+| monthColor               | Color                  | Color for month list elements                               |
+| dayColor                 | Color                  | Color for day list elements                                 |
+| activeDayColor           | Color                  | Color for selected day text                                 |
+| activeBackgroundDayColor | Color                  | Color for selected day background                           |
 
 
 ## Use example

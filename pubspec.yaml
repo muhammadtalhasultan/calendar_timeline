@@ -1,6 +1,6 @@
 name: calendar_timeline
 description: Flutter widget form select a date in horizontal timeline. You can select month and day easily.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/ikicodedev/calendar_timeline
 
 environment:

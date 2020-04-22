@@ -124,7 +124,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                if (currentDate.month == 1)
+                if (index == 0 || currentDate.month == 1)
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Text(
@@ -212,7 +212,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
       _months.firstWhere((monthDate) => monthDate.year == widget.initialDate.year
         && monthDate.month == widget.initialDate.month)
     );
-    _daySelectedIndex = widget.initialDate.day - 1;
+    _daySelectedIndex = _days.indexOf(
+      _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day)
+    );
     _controllerDay = ScrollController(
       initialScrollOffset:_daySelectedIndex * _dayItemExtend,
     );
@@ -268,7 +270,7 @@ class _DayItem extends StatelessWidget {
   final double height = 70.0;
   final double width = 60.0;
 
-  _activeDay(BuildContext context) {
+  _buildActiveDay(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: activeBackgroundColor ?? Theme.of(context).accentColor,
@@ -279,13 +281,7 @@ class _DayItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SizedBox(height: 7),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildDot(),
-              _buildDot(),
-            ],
-          ),
+          _buildDots(),
           SizedBox(height: 12),
           Text(
             dayNumber.toString(),
@@ -309,8 +305,9 @@ class _DayItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDot() {
-    return Container(
+  Widget _buildDots() {
+    
+    final dot = Container(
       height: 5,
       width: 5,
       decoration: new BoxDecoration(
@@ -318,9 +315,14 @@ class _DayItem extends StatelessWidget {
         shape: BoxShape.circle,
       ),
     );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [dot, dot],
+    );
   }
 
-  _passiveDay(BuildContext context) {
+  _buildDay(BuildContext context) {
     return GestureDetector(
       onTap: available ? onTap : null,
       child: Container(
@@ -346,7 +348,7 @@ class _DayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isSelected ? _activeDay(context) : _passiveDay(context);
+    return isSelected ? _buildActiveDay(context) : _buildDay(context);
   }
 }
 
