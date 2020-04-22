@@ -15,6 +15,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color activeDayColor;
   final Color activeBackgroundDayColor;
   final Color monthColor;
+  final Color dotsColor;
 
   CalendarTimeline({Key key,
     @required this.initialDate,
@@ -26,7 +27,8 @@ class CalendarTimeline extends StatefulWidget {
     this.dayColor,
     this.activeDayColor,
     this.activeBackgroundDayColor,
-    this.monthColor
+    this.monthColor,
+    this.dotsColor
   })
     : assert(initialDate != null),
       assert(firstDate != null),
@@ -97,7 +99,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
             activeTextColor: widget.activeDayColor,
             activeBackgroundColor: widget.activeBackgroundDayColor,
             onTap: () => _goToActualDay(index),
-            available: widget.selectableDayPredicate == null ? true : widget.selectableDayPredicate(currentDay)
+            available: widget.selectableDayPredicate == null ? true : widget.selectableDayPredicate(currentDay),
+            dotsColor: widget.dotsColor,
           );
         },
       ),
@@ -254,6 +257,7 @@ class _DayItem extends StatelessWidget {
   final Color activeTextColor;
   final Color activeBackgroundColor;
   final bool available;
+  final Color dotsColor;
 
   const _DayItem({Key key,
     @required this.dayNumber,
@@ -264,6 +268,7 @@ class _DayItem extends StatelessWidget {
     this.activeTextColor,
     this.activeBackgroundColor,
     this.available = true,
+    this.dotsColor
   })
     : super(key: key);
 
@@ -311,7 +316,7 @@ class _DayItem extends StatelessWidget {
       height: 5,
       width: 5,
       decoration: new BoxDecoration(
-        color: activeTextColor ?? Colors.white,
+        color: this.dotsColor ?? this.activeTextColor,
         shape: BoxShape.circle,
       ),
     );
