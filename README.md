@@ -4,7 +4,7 @@ Flutter widget form select a date in horizontal timeline with customizable style
 
 ## Getting Started
 
-You can use this package when you need to add a date picker that is always visible and manageable with just one finger.
+You can use this package when you need to add a date picker that takes up little screen space, so we can always have it visible, and that facilitates use with one hand.
 
 ![calendar_timeline_example.gif](calendar_timeline_example.gif)
 
