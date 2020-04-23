@@ -1,3 +1,7 @@
+## 0.3.1 - 23/04/2020
+
+* Fix error if initialDate and firstDate are the same day
+
 ## 0.3.0 - 22/04/2020
 
 * Add dotColor parameter

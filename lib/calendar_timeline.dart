@@ -33,7 +33,7 @@ class CalendarTimeline extends StatefulWidget {
     : assert(initialDate != null),
       assert(firstDate != null),
       assert(lastDate != null),
-      assert(!initialDate.isBefore(firstDate), 'initialDate must be on or after firstDate'),
+      assert(initialDate.difference(firstDate).inDays >= 0, 'initialDate must be on or after firstDate'),
       assert(!initialDate.isAfter(lastDate), 'initialDate must be on or before lastDate'),
       assert(!firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate'),
       assert(selectableDayPredicate == null || selectableDayPredicate(initialDate),
@@ -158,7 +158,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _days.clear();
     for (var i = 1; i <= 31; i++) {
       final day = DateTime(selectedMonth.year, selectedMonth.month, i);
-      if (day.isBefore(widget.firstDate)) continue;
+      if (day.difference(widget.firstDate).inDays < 0) continue;
       if (day.month != selectedMonth.month || day.isAfter(widget.lastDate)) break;
       _days.add(day);
     }

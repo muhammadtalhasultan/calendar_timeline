@@ -7,9 +7,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -30,12 +28,13 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Text('Calendar Timeline', style: Theme.of(context).textTheme.title.copyWith(color: Colors.tealAccent[100]),),
+              child: Text(
+                'Calendar Timeline',
+                style: Theme.of(context).textTheme.title.copyWith(color: Colors.tealAccent[100]),
+              ),
             ),
-
             CalendarTimeline(
               initialDate: DateTime(2020, 2, 20),
               firstDate: DateTime(2020, 2, 15),
@@ -51,8 +50,7 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
-
