@@ -17,28 +17,33 @@ class CalendarTimeline extends StatefulWidget {
   final Color monthColor;
   final Color dotsColor;
 
-  CalendarTimeline({Key key,
-    @required this.initialDate,
-    @required this.firstDate,
-    @required this.lastDate,
-    @required this.onDateSelected,
-    this.selectableDayPredicate,
-    this.leftMargin = 0,
-    this.dayColor,
-    this.activeDayColor,
-    this.activeBackgroundDayColor,
-    this.monthColor,
-    this.dotsColor
-  })
-    : assert(initialDate != null),
-      assert(firstDate != null),
-      assert(lastDate != null),
-      assert(initialDate.difference(firstDate).inDays >= 0, 'initialDate must be on or after firstDate'),
-      assert(!initialDate.isAfter(lastDate), 'initialDate must be on or before lastDate'),
-      assert(!firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate'),
-      assert(selectableDayPredicate == null || selectableDayPredicate(initialDate),
-      'Provided initialDate must satisfy provided selectableDayPredicate'),
-      super(key: key);
+  CalendarTimeline(
+      {Key key,
+      @required this.initialDate,
+      @required this.firstDate,
+      @required this.lastDate,
+      @required this.onDateSelected,
+      this.selectableDayPredicate,
+      this.leftMargin = 0,
+      this.dayColor,
+      this.activeDayColor,
+      this.activeBackgroundDayColor,
+      this.monthColor,
+      this.dotsColor})
+      : assert(initialDate != null),
+        assert(firstDate != null),
+        assert(lastDate != null),
+        assert(initialDate.difference(firstDate).inDays >= 0,
+            'initialDate must be on or after firstDate'),
+        assert(!initialDate.isAfter(lastDate),
+            'initialDate must be on or before lastDate'),
+        assert(!firstDate.isAfter(lastDate),
+            'lastDate must be on or after firstDate'),
+        assert(
+            selectableDayPredicate == null ||
+                selectableDayPredicate(initialDate),
+            'Provided initialDate must satisfy provided selectableDayPredicate'),
+        super(key: key);
 
   @override
   _CalendarTimelineState createState() => _CalendarTimelineState();
@@ -89,18 +94,20 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         itemExtent: _dayItemExtend,
         padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
         itemBuilder: (BuildContext context, int index) {
-
           final currentDay = _days[index];
 
           return _DayItem(
             isSelected: _daySelectedIndex == index,
             dayNumber: _days[index].day,
-            shortName: _formatterDay.format(currentDay).capitalize().substring(0, 2),
+            shortName:
+                _formatterDay.format(currentDay).capitalize().substring(0, 2),
             dayColor: widget.dayColor,
             activeDayColor: widget.activeDayColor,
             activeDayBackgroundColor: widget.activeBackgroundDayColor,
             onTap: () => _goToActualDay(index),
-            available: widget.selectableDayPredicate == null ? true : widget.selectableDayPredicate(currentDay),
+            available: widget.selectableDayPredicate == null
+                ? true
+                : widget.selectableDayPredicate(currentDay),
             dotsColor: widget.dotsColor,
           );
         },
@@ -128,7 +135,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                if (widget.firstDate.year != currentDate.year && currentDate.month == 1)
+                if (widget.firstDate.year != currentDate.year &&
+                    currentDate.month == 1)
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Container(
@@ -168,7 +176,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     for (var i = 1; i <= 31; i++) {
       final day = DateTime(selectedMonth.year, selectedMonth.month, i);
       if (day.difference(widget.firstDate).inDays < 0) continue;
-      if (day.month != selectedMonth.month || day.isAfter(widget.lastDate)) break;
+      if (day.month != selectedMonth.month || day.isAfter(widget.lastDate))
+        break;
       _days.add(day);
     }
   }
@@ -184,7 +193,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _resetCalendar(DateTime date) {
     _generateDays(date);
     _daySelectedIndex = null;
-    _controllerDay.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+    _controllerDay.animateTo(0,
+        duration: Duration(milliseconds: 500), curve: Curves.easeIn);
   }
 
   _goToActualMonth(int index) {
@@ -221,15 +231,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _initCalendar() {
     _generateMonths();
     _generateDays(widget.initialDate);
-    _monthSelectedIndex = _months.indexOf(
-      _months.firstWhere((monthDate) => monthDate.year == widget.initialDate.year
-        && monthDate.month == widget.initialDate.month)
-    );
+    _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
+        monthDate.year == widget.initialDate.year &&
+        monthDate.month == widget.initialDate.month));
     _daySelectedIndex = _days.indexOf(
-      _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day)
-    );
+        _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day));
     _controllerDay = ScrollController(
-      initialScrollOffset:_daySelectedIndex * _dayItemExtend,
+      initialScrollOffset: _daySelectedIndex * _dayItemExtend,
     );
   }
 }
@@ -269,18 +277,18 @@ class _DayItem extends StatelessWidget {
   final bool available;
   final Color dotsColor;
 
-  const _DayItem({Key key,
-    @required this.dayNumber,
-    @required this.shortName,
-    @required this.isSelected,
-    @required this.onTap,
-    this.dayColor,
-    this.activeDayColor,
-    this.activeDayBackgroundColor,
-    this.available = true,
-    this.dotsColor
-  })
-    : super(key: key);
+  const _DayItem(
+      {Key key,
+      @required this.dayNumber,
+      @required this.shortName,
+      @required this.isSelected,
+      @required this.onTap,
+      this.dayColor,
+      this.activeDayColor,
+      this.activeDayBackgroundColor,
+      this.available = true,
+      this.dotsColor})
+      : super(key: key);
 
   final double height = 70.0;
   final double width = 60.0;
@@ -321,7 +329,6 @@ class _DayItem extends StatelessWidget {
   }
 
   Widget _buildDots() {
-    
     final dot = Container(
       height: 5,
       width: 5,
@@ -350,8 +357,9 @@ class _DayItem extends StatelessWidget {
               dayNumber.toString(),
               style: TextStyle(
                   color: available
-                    ? dayColor ?? Theme.of(context).accentColor
-                    : dayColor?.withOpacity(0.5) ?? Theme.of(context).accentColor.withOpacity(0.5),
+                      ? dayColor ?? Theme.of(context).accentColor
+                      : dayColor?.withOpacity(0.5) ??
+                          Theme.of(context).accentColor.withOpacity(0.5),
                   fontSize: 32,
                   fontWeight: FontWeight.normal),
             ),
