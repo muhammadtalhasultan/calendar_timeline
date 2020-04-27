@@ -131,12 +131,21 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 if (widget.firstDate.year != currentDate.year && currentDate.month == 1)
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: Text(
-                      DateFormat.y().format(currentDate),
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontSize: 20,
-                        color: widget.monthColor,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: widget.monthColor, width: 1),
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14.0, vertical: 5.0),
+                        child: Text(
+                          DateFormat.y().format(currentDate),
+                          style: TextStyle(
+                            color: widget.monthColor,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                     ),
                   ),
