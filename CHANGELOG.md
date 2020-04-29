@@ -1,3 +1,7 @@
+## 0.4.0 - 29/04/2020
+
+* Modify design year item
+
 ## 0.3.1 - 23/04/2020
 
 * Fix error if initialDate and firstDate are the same day
