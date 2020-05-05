@@ -16,6 +16,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color activeBackgroundDayColor;
   final Color monthColor;
   final Color dotsColor;
+  final Color dayNameColor;
 
   CalendarTimeline({Key key,
     @required this.initialDate,
@@ -28,7 +29,8 @@ class CalendarTimeline extends StatefulWidget {
     this.activeDayColor,
     this.activeBackgroundDayColor,
     this.monthColor,
-    this.dotsColor
+    this.dotsColor,
+    this.dayNameColor
   })
     : assert(initialDate != null),
       assert(firstDate != null),
@@ -95,13 +97,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
           return _DayItem(
             isSelected: _daySelectedIndex == index,
             dayNumber: _days[index].day,
-            shortName: _formatterDay.format(currentDay).capitalize().substring(0, 2),
+            shortName: _formatterDay.format(currentDay).substring(0, 3).capitalize(),
+            onTap: () => _goToActualDay(index),
+            available: widget.selectableDayPredicate == null ? true : widget.selectableDayPredicate(currentDay),
             dayColor: widget.dayColor,
             activeDayColor: widget.activeDayColor,
             activeDayBackgroundColor: widget.activeBackgroundDayColor,
-            onTap: () => _goToActualDay(index),
-            available: widget.selectableDayPredicate == null ? true : widget.selectableDayPredicate(currentDay),
             dotsColor: widget.dotsColor,
+            dayNameColor: widget.dayNameColor,
           );
         },
       ),
@@ -266,6 +269,7 @@ class _DayItem extends StatelessWidget {
   final Color activeDayBackgroundColor;
   final bool available;
   final Color dotsColor;
+  final Color dayNameColor;
 
   const _DayItem({Key key,
     @required this.dayNumber,
@@ -276,7 +280,8 @@ class _DayItem extends StatelessWidget {
     this.activeDayColor,
     this.activeDayBackgroundColor,
     this.available = true,
-    this.dotsColor
+    this.dotsColor,
+    this.dayNameColor
   })
     : super(key: key);
 
@@ -308,7 +313,7 @@ class _DayItem extends StatelessWidget {
           Text(
             shortName,
             style: TextStyle(
-              color: activeDayColor ?? Colors.white,
+              color: dayNameColor ?? activeDayColor ?? Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),

@@ -1,3 +1,7 @@
+## 0.5.0 - 05/05/2020
+
+* Add dayNameColor parameter
+
 ## 0.4.0 - 29/04/2020
 
 * Modify design year item

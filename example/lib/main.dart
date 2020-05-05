@@ -43,6 +43,7 @@ class HomePage extends StatelessWidget {
               leftMargin: 20,
               monthColor: Colors.white70,
               dayColor: Colors.teal[200],
+              dayNameColor: Color(0xFF333A47),
               activeDayColor: Colors.white,
               activeBackgroundDayColor: Colors.redAccent[100],
               dotsColor: Color(0xFF333A47),
