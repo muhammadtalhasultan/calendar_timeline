@@ -23,7 +23,7 @@ You can use this package when you need to add a date picker that takes up little
 | activeDayColor           | Color                  | Color for selected day text                                 |
 | activeBackgroundDayColor | Color                  | Color for selected day background                           |
 | dotColor                 | Color                  | Color for top dots in select day                            |
-| locale                   | Strin                  | Locale string to get formatted date                         |
+| locale                   | String                 | Locale string to get formatted date                         |
 
 
 ## Use example
