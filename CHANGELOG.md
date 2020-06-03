@@ -1,3 +1,7 @@
+## 0.6.0 - 03/06/2020
+
+* Added locale parameter
+
 ## 0.5.0 - 05/05/2020
 
 * Add dayNameColor parameter
