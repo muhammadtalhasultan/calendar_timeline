@@ -32,7 +32,10 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Calendar Timeline',
-                style: Theme.of(context).textTheme.title.copyWith(color: Colors.tealAccent[100]),
+                style: Theme.of(context)
+                    .textTheme
+                    .title
+                    .copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
@@ -48,6 +51,7 @@ class HomePage extends StatelessWidget {
               activeBackgroundDayColor: Colors.redAccent[100],
               dotsColor: Color(0xFF333A47),
               selectableDayPredicate: (date) => date.day != 23,
+              locale: 'en_ISO',
             ),
           ],
         ),
