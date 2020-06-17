@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 typedef OnDateSelected = void Function(DateTime);
 
@@ -70,22 +70,29 @@ class CalendarTimeline extends StatefulWidget {
 
 class _CalendarTimelineState extends State<CalendarTimeline> {
   final ItemScrollController _controllerMonth = ItemScrollController();
-  ScrollController _controllerDay;
-
-  final double _dayItemExtend = 60.0;
+  final ItemScrollController _controllerDay = ItemScrollController();
 
   int _monthSelectedIndex;
   int _daySelectedIndex;
-  double _scrollMonthAlignment;
+  double _scrollAlignment;
 
   List<DateTime> _months = [];
   List<DateTime> _days = [];
+  DateTime _selectedDate;
 
   @override
   void initState() {
     super.initState();
     _initCalendar();
-    _scrollMonthAlignment = widget.leftMargin / 440;
+    _scrollAlignment = widget.leftMargin / 440;
+  }
+
+  @override
+  void didUpdateWidget(CalendarTimeline oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _initCalendar();
+    _moveToMonthIndex(_monthSelectedIndex);
+    _moveToDayIndex(_daySelectedIndex);
   }
 
   @override
@@ -103,11 +110,12 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   SizedBox _buildDayList() {
     return SizedBox(
       height: 75,
-      child: ListView.builder(
-        controller: _controllerDay,
+      child: ScrollablePositionedList.builder(
+        itemScrollController: _controllerDay,
+        initialScrollIndex: _daySelectedIndex,
+        initialAlignment: _scrollAlignment,
         scrollDirection: Axis.horizontal,
         itemCount: _days.length,
-        itemExtent: _dayItemExtend,
         padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
@@ -139,7 +147,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
       height: 40,
       child: ScrollablePositionedList.builder(
         initialScrollIndex: _monthSelectedIndex,
-        initialAlignment: _scrollMonthAlignment,
+        initialAlignment: _scrollAlignment,
         itemScrollController: _controllerMonth,
         padding: EdgeInsets.only(left: widget.leftMargin),
         scrollDirection: Axis.horizontal,
@@ -202,6 +210,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   _generateMonths() {
+    _months.clear();
     DateTime date = DateTime(widget.firstDate.year, widget.firstDate.month);
     while (date.isBefore(widget.lastDate)) {
       _months.add(date);
@@ -212,52 +221,56 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _resetCalendar(DateTime date) {
     _generateDays(date);
     _daySelectedIndex = null;
-    _controllerDay.animateTo(0,
-        duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+    _controllerDay.scrollTo(
+      index: 0,
+      alignment: _scrollAlignment,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeIn,
+    );
   }
 
   _goToActualMonth(int index) {
+    _moveToMonthIndex(index);
     _monthSelectedIndex = index;
-    if (index < (_months.length - 4)) {
-      _controllerMonth.scrollTo(
-        index: index,
-        alignment: _scrollMonthAlignment,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeIn,
-      );
-    }
     _resetCalendar(_months[index]);
     setState(() {});
   }
 
-  _goToActualDay(int index) {
-    double offset = index < 0 ? 0 : index * _dayItemExtend;
-    if (offset > _controllerDay.position.maxScrollExtent) {
-      offset = _controllerDay.position.maxScrollExtent;
-    }
-
-    _daySelectedIndex = index;
-    _controllerDay.animateTo(
-      offset,
+  void _moveToMonthIndex(int index) {
+    _controllerMonth.scrollTo(
+      index: index,
+      alignment: _scrollAlignment,
       duration: Duration(milliseconds: 500),
       curve: Curves.easeIn,
     );
+  }
 
-    widget.onDateSelected(_days[index]);
+  _goToActualDay(int index) {
+    _moveToDayIndex(index);
+    _daySelectedIndex = index;
+    _selectedDate = _days[index];
+    widget.onDateSelected(_selectedDate);
     setState(() {});
   }
 
+  void _moveToDayIndex(int index) {
+    _controllerDay.scrollTo(
+      index: index,
+      alignment: _scrollAlignment,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeIn,
+    );
+  }
+
   _initCalendar() {
+    _selectedDate = widget.initialDate;
     _generateMonths();
-    _generateDays(widget.initialDate);
+    _generateDays(_selectedDate);
     _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
         monthDate.year == widget.initialDate.year &&
         monthDate.month == widget.initialDate.month));
     _daySelectedIndex = _days.indexOf(
         _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day));
-    _controllerDay = ScrollController(
-      initialScrollOffset: _daySelectedIndex * _dayItemExtend,
-    );
   }
 }
 

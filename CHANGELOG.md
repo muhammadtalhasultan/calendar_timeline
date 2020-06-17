@@ -1,3 +1,7 @@
+## 0.6.1 - 17/06/2020
+
+* Update widget if state changes
+
 ## 0.6.0 - 03/06/2020
 
 * Added locale parameter

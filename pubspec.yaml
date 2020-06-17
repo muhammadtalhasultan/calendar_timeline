@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  scrollable_positioned_list: ^0.1.5
-  intl: ^0.16.0
+  scrollable_positioned_list: ^0.1.6
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

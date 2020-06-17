@@ -19,7 +19,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  DateTime _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _resetSelectedDate();
+  }
+
+  void _resetSelectedDate() {
+    _selectedDate = DateTime(2020, 3, 26);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +52,12 @@ class HomePage extends StatelessWidget {
                 'Calendar Timeline',
                 style: Theme.of(context)
                     .textTheme
-                    .title
+                    .headline6
                     .copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
-              initialDate: DateTime(2020, 2, 20),
+              initialDate: _selectedDate,
               firstDate: DateTime(2020, 2, 15),
               lastDate: DateTime(2021, 11, 20),
               onDateSelected: (date) => print(date),
@@ -53,6 +71,11 @@ class HomePage extends StatelessWidget {
               selectableDayPredicate: (date) => date.day != 23,
               locale: 'en_ISO',
             ),
+            SizedBox(height: 20),
+            FlatButton(
+              child: Text('RESET', style: TextStyle(color: Colors.white70)),
+              onPressed: () => setState(() => _resetSelectedDate()),
+            )
           ],
         ),
       ),
