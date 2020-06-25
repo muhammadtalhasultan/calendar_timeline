@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _resetSelectedDate() {
-    _selectedDate = DateTime(2020, 3, 26);
+    _selectedDate = DateTime(2020, 6, 26);
   }
 
   @override
@@ -58,8 +58,8 @@ class _HomePageState extends State<HomePage> {
             ),
             CalendarTimeline(
               initialDate: _selectedDate,
-              firstDate: DateTime(2020, 2, 15),
-              lastDate: DateTime(2021, 11, 20),
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(Duration(days: 180)),
               onDateSelected: (date) => print(date),
               leftMargin: 20,
               monthColor: Colors.white70,

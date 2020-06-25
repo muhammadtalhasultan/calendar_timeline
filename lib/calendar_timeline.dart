@@ -120,22 +120,28 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
 
-          return _DayItem(
-            isSelected: _daySelectedIndex == index,
-            dayNumber: _days[index].day,
-            shortName: DateFormat.E(widget.locale)
-                .format(currentDay)
-                .substring(0, 3)
-                .capitalize(),
-            onTap: () => _goToActualDay(index),
-            available: widget.selectableDayPredicate == null
-                ? true
-                : widget.selectableDayPredicate(currentDay),
-            dayColor: widget.dayColor,
-            activeDayColor: widget.activeDayColor,
-            activeDayBackgroundColor: widget.activeBackgroundDayColor,
-            dotsColor: widget.dotsColor,
-            dayNameColor: widget.dayNameColor,
+          return Row(
+            children: <Widget>[
+              _DayItem(
+                isSelected: _daySelectedIndex == index,
+                dayNumber: _days[index].day,
+                shortName: DateFormat.E(widget.locale)
+                    .format(currentDay)
+                    .substring(0, 3)
+                    .capitalize(),
+                onTap: () => _goToActualDay(index),
+                available: widget.selectableDayPredicate == null
+                    ? true
+                    : widget.selectableDayPredicate(currentDay),
+                dayColor: widget.dayColor,
+                activeDayColor: widget.activeDayColor,
+                activeDayBackgroundColor: widget.activeBackgroundDayColor,
+                dotsColor: widget.dotsColor,
+                dayNameColor: widget.dayNameColor,
+              ),
+              if (index == _days.length - 1)
+                SizedBox(width: MediaQuery.of(context).size.width - widget.leftMargin - 65)
+            ],
           );
         },
       ),
@@ -190,6 +196,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                   onTap: () => _goToActualMonth(index),
                   color: widget.monthColor,
                 ),
+                if (index == _months.length - 1)
+                  SizedBox(width: MediaQuery.of(context).size.width - 100)
               ],
             ),
           );
