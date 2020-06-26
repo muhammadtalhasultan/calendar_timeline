@@ -1,5 +1,6 @@
-## 0.6.2 - 25/06/2020
+## 0.6.2 - 26/06/2020
 
+* Check local localizations for intl default config
 * Allow the last item in the listings to be left aligned
 
 ## 0.6.1 - 17/06/2020

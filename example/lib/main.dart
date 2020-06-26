@@ -70,7 +70,11 @@ class _HomePageState extends State<HomePage> {
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(Duration(days: 365)),
-              onDateSelected: (date) => print(date),
+              onDateSelected: (date) {
+                setState(() {
+                  _selectedDate = date;
+                });
+              },
               leftMargin: 20,
               monthColor: Colors.white70,
               dayColor: Colors.teal[200],
@@ -82,10 +86,16 @@ class _HomePageState extends State<HomePage> {
               //locale: 'en_ISO',
             ),
             SizedBox(height: 20),
-            FlatButton(
-              child: Text('RESET', style: TextStyle(color: Colors.white70)),
-              onPressed: () => setState(() => _resetSelectedDate()),
-            )
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: FlatButton(
+                color: Colors.teal[200],
+                child: Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
+                onPressed: () => setState(() => _resetSelectedDate()),
+              ),
+            ),
+            SizedBox(height: 20),
+            Center(child: Text('Selected date is $_selectedDate', style: TextStyle(color: Colors.white)))
           ],
         ),
       ),
