@@ -1,6 +1,7 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,6 +15,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('es', ''),
+        const Locale('en', ''),
+      ],
       home: HomePage(),
     );
   }
@@ -35,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _resetSelectedDate() {
-    _selectedDate = DateTime(2020, 6, 26);
+    _selectedDate = DateTime.now().add(Duration(days: 5));
   }
 
   @override
@@ -59,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             CalendarTimeline(
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(Duration(days: 180)),
+              lastDate: DateTime.now().add(Duration(days: 365)),
               onDateSelected: (date) => print(date),
               leftMargin: 20,
               monthColor: Colors.white70,
@@ -69,7 +79,7 @@ class _HomePageState extends State<HomePage> {
               activeBackgroundDayColor: Colors.redAccent[100],
               dotsColor: Color(0xFF333A47),
               selectableDayPredicate: (date) => date.day != 23,
-              locale: 'en_ISO',
+              //locale: 'en_ISO',
             ),
             SizedBox(height: 20),
             FlatButton(

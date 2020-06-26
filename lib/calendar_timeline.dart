@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -34,7 +35,7 @@ class CalendarTimeline extends StatefulWidget {
     this.monthColor,
     this.dotsColor,
     this.dayNameColor,
-    this.locale = 'en',
+    this.locale,
   })  : assert(initialDate != null),
         assert(firstDate != null),
         assert(lastDate != null),
@@ -55,17 +56,13 @@ class CalendarTimeline extends StatefulWidget {
           'Provided initialDate must satisfy provided selectableDayPredicate',
         ),
         assert(
-          dateTimeSymbolMap().containsKey(locale),
+          locale == null || dateTimeSymbolMap().containsKey(locale),
           'Provided locale value doesn\'t exist',
         ),
         super(key: key);
 
   @override
-  _CalendarTimelineState createState() {
-    initializeDateFormatting(locale);
-
-    return _CalendarTimelineState();
-  }
+  _CalendarTimelineState createState() => _CalendarTimelineState();
 }
 
 class _CalendarTimelineState extends State<CalendarTimeline> {
@@ -80,12 +77,19 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   List<DateTime> _days = [];
   DateTime _selectedDate;
 
+  String get _locale => widget.locale ?? Localizations.localeOf(context).languageCode;
+
   @override
   void initState() {
     super.initState();
     _initCalendar();
     _scrollAlignment = widget.leftMargin / 440;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      initializeDateFormatting(_locale);
+    });
   }
+
+
 
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
@@ -124,8 +128,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
             children: <Widget>[
               _DayItem(
                 isSelected: _daySelectedIndex == index,
-                dayNumber: _days[index].day,
-                shortName: DateFormat.E(widget.locale)
+                dayNumber: currentDay.day,
+                shortName: DateFormat.E(_locale)
                     .format(currentDay)
                     .substring(0, 3)
                     .capitalize(),
@@ -160,6 +164,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         itemCount: _months.length,
         itemBuilder: (BuildContext context, int index) {
           final currentDate = _months[index];
+          final monthName = DateFormat.MMMM(_locale).format(currentDate);
 
           return Padding(
             padding: const EdgeInsets.only(right: 12.0, left: 4.0),
@@ -181,7 +186,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 14.0, vertical: 5.0),
                         child: Text(
-                          DateFormat.y(widget.locale).format(currentDate),
+                          DateFormat.y(_locale).format(currentDate),
                           style: TextStyle(
                             color: widget.monthColor,
                             fontSize: 12,
@@ -192,12 +197,16 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                   ),
                 MonthName(
                   isSelected: _monthSelectedIndex == index,
-                  name: DateFormat.MMMM(widget.locale).format(currentDate),
+                  name: monthName,
                   onTap: () => _goToActualMonth(index),
                   color: widget.monthColor,
                 ),
                 if (index == _months.length - 1)
-                  SizedBox(width: MediaQuery.of(context).size.width - 100)
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width -
+                          widget.leftMargin -
+                          (monthName.length * 10),
+                  )
               ],
             ),
           );
