@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
-        const Locale('es', ''),
-        const Locale('en', ''),
+        const Locale('es'),
+        const Locale('en'),
       ],
       home: HomePage(),
     );
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
               activeBackgroundDayColor: Colors.redAccent[100],
               dotsColor: Color(0xFF333A47),
               selectableDayPredicate: (date) => date.day != 23,
-              //locale: 'en_ISO',
+              locale: 'en',
             ),
             SizedBox(height: 20),
             Padding(

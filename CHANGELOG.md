@@ -1,3 +1,9 @@
+## 0.6.3 - 10/08/2020
+
+* Fix error when generating the abbreviation of the day of the week in different locales
+* Show the selected day when regenerating the days after pressing a month
+* Upgrade dependencies
+
 ## 0.6.2 - 26/06/2020
 
 * Check local localizations for intl default config

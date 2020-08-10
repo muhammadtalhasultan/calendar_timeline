@@ -123,16 +123,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
-
+          final shortName = DateFormat.E(_locale).format(currentDay).capitalize();
           return Row(
             children: <Widget>[
               _DayItem(
                 isSelected: _daySelectedIndex == index,
                 dayNumber: currentDay.day,
-                shortName: DateFormat.E(_locale)
-                    .format(currentDay)
-                    .substring(0, 3)
-                    .capitalize(),
+                shortName: shortName.length > 3 ? shortName.substring(0, 3) : shortName,
                 onTap: () => _goToActualDay(index),
                 available: widget.selectableDayPredicate == null
                     ? true
@@ -237,9 +234,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   _resetCalendar(DateTime date) {
     _generateDays(date);
-    _daySelectedIndex = null;
+    _daySelectedIndex = date.month == _selectedDate.month
+      ? _days.indexOf(_days.firstWhere((dayDate) => dayDate.day == _selectedDate.day))
+      : null;
     _controllerDay.scrollTo(
-      index: 0,
+      index: _daySelectedIndex ?? 0,
       alignment: _scrollAlignment,
       duration: Duration(milliseconds: 500),
       curve: Curves.easeIn,
