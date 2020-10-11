@@ -20,6 +20,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color dotsColor;
   final Color dayNameColor;
   final String locale;
+  final double dayTextSize;
 
   CalendarTimeline({
     Key key,
@@ -30,6 +31,7 @@ class CalendarTimeline extends StatefulWidget {
     this.selectableDayPredicate,
     this.leftMargin = 0,
     this.dayColor,
+    this.dayTextSize,
     this.activeDayColor,
     this.activeBackgroundDayColor,
     this.monthColor,
@@ -366,7 +368,7 @@ class _DayItem extends StatelessWidget {
             dayNumber.toString(),
             style: TextStyle(
               color: activeDayColor ?? Colors.white,
-              fontSize: 32,
+              fontSize: widget.dayTextSize,
               fontWeight: FontWeight.bold,
               height: 0.8,
             ),
