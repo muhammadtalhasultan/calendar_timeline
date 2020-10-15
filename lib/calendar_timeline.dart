@@ -314,6 +314,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   /// It will populate the [_years] list with the years between firstDate and lastDate
   _generateYears() {
+    _years.clear();
     DateTime date = widget.firstDate;
     while (date.isBefore(widget.lastDate)) {
       _years.add(date);
