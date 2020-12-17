@@ -67,6 +67,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             CalendarTimeline(
+              showYears: true,
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(Duration(days: 365)),
