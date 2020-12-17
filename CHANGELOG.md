@@ -1,3 +1,7 @@
+## 0.7.0 - 17/12/2020
+
+* Added option to see years individually. Thanks to https://github.com/Flucadetena.
+
 ## 0.6.3 - 10/08/2020
 
 * Fix error when generating the abbreviation of the day of the week in different locales
