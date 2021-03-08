@@ -35,7 +35,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   DateTime _selectedDate;
 
   @override
@@ -60,10 +59,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Calendar Timeline',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(color: Colors.tealAccent[100]),
+                style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
@@ -89,8 +85,8 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 16),
-              child: FlatButton(
-                color: Colors.teal[200],
+              child: TextButton(
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal[200])),
                 child: Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
                 onPressed: () => setState(() => _resetSelectedDate()),
               ),
