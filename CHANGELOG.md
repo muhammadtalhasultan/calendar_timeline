@@ -1,3 +1,7 @@
+## 0.7.1 - 09/03/2021
+
+* Update packages
+
 ## 0.7.0 - 17/12/2020
 
 * Added option to see years individually. Thanks to https://github.com/Flucadetena.
