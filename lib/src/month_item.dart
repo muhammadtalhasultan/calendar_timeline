@@ -7,7 +7,12 @@ class MonthItem extends StatelessWidget {
   final bool isSelected;
   final Color color;
 
-  MonthItem({this.name, this.onTap, this.isSelected, this.color});
+  MonthItem({
+    @required this.name,
+    @required this.onTap,
+    this.isSelected = false,
+    this.color
+  });
 
   @override
   Widget build(BuildContext context) {

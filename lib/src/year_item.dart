@@ -10,12 +10,13 @@ class YearItem extends StatelessWidget {
   final Color color;
   final bool small;
 
-  YearItem(
-    {this.name,
-      this.onTap,
-      this.isSelected = false,
-      this.color,
-      this.small = true});
+  YearItem({
+    @required this.name,
+    @required this.onTap,
+    this.isSelected = false,
+    this.small = true,
+    this.color
+  });
 
   @override
   Widget build(BuildContext context) {
