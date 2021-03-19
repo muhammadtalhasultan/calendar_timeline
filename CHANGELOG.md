@@ -1,3 +1,7 @@
+## 1.0.0 - 19/03/2021
+
+* Migrate to null safety
+
 ## 0.7.1 - 09/03/2021
 
 * Update packages
