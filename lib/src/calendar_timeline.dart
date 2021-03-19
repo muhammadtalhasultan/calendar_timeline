@@ -9,7 +9,7 @@ import 'month_item.dart';
 import 'util/string_extension.dart';
 import 'year_item.dart';
 
-typedef OnDateSelected = void Function(DateTime);
+typedef OnDateSelected = void Function(DateTime?);
 
 /// Creates a minimal, small profile calendar to select specific dates.
 /// [initialDate] must not be [null], the same or after [firstDate] and
@@ -19,27 +19,27 @@ class CalendarTimeline extends StatefulWidget {
   final DateTime initialDate;
   final DateTime firstDate;
   final DateTime lastDate;
-  final SelectableDayPredicate selectableDayPredicate;
+  final SelectableDayPredicate? selectableDayPredicate;
   final OnDateSelected onDateSelected;
   final double leftMargin;
-  final Color dayColor;
-  final Color activeDayColor;
-  final Color activeBackgroundDayColor;
-  final Color monthColor;
-  final Color dotsColor;
-  final Color dayNameColor;
-  final String locale;
+  final Color? dayColor;
+  final Color? activeDayColor;
+  final Color? activeBackgroundDayColor;
+  final Color? monthColor;
+  final Color? dotsColor;
+  final Color? dayNameColor;
+  final String? locale;
 
   /// If true, it will show a separate row for the years.
   /// It defaults to false
   final bool showYears;
 
   CalendarTimeline({
-    Key key,
-    @required this.initialDate,
-    @required this.firstDate,
-    @required this.lastDate,
-    @required this.onDateSelected,
+    Key? key,
+    required this.initialDate,
+    required this.firstDate,
+    required this.lastDate,
+    required this.onDateSelected,
     this.selectableDayPredicate,
     this.leftMargin = 0,
     this.dayColor,
@@ -50,10 +50,7 @@ class CalendarTimeline extends StatefulWidget {
     this.dayNameColor,
     this.locale,
     this.showYears = false,
-  })  : assert(initialDate != null),
-        assert(firstDate != null),
-        assert(lastDate != null),
-        assert(
+  })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
         ),
@@ -84,15 +81,15 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   final ItemScrollController _controllerMonth = ItemScrollController();
   final ItemScrollController _controllerDay = ItemScrollController();
 
-  int _yearSelectedIndex;
-  int _monthSelectedIndex;
-  int _daySelectedIndex;
-  double _scrollAlignment;
+  int? _yearSelectedIndex;
+  int? _monthSelectedIndex;
+  int? _daySelectedIndex;
+  late double _scrollAlignment;
 
   List<DateTime> _years = [];
   List<DateTime> _months = [];
   List<DateTime> _days = [];
-  DateTime _selectedDate;
+  DateTime? _selectedDate;
 
   String get _locale =>
       widget.locale ?? Localizations.localeOf(context).languageCode;
@@ -103,7 +100,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     super.initState();
     _initCalendar();
     _scrollAlignment = widget.leftMargin / 440;
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       initializeDateFormatting(_locale);
     });
   }
@@ -113,9 +110,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     _initCalendar();
-    if (widget.showYears) _moveToYearIndex(_yearSelectedIndex);
-    _moveToMonthIndex(_monthSelectedIndex);
-    _moveToDayIndex(_daySelectedIndex);
+    if (widget.showYears) _moveToYearIndex(_yearSelectedIndex ?? 0);
+    _moveToMonthIndex(_monthSelectedIndex ?? 0);
+    _moveToDayIndex(_daySelectedIndex ?? 0);
   }
 
   @override
@@ -139,7 +136,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
       height: 75,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
-        initialScrollIndex: _daySelectedIndex,
+        initialScrollIndex: _daySelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
         scrollDirection: Axis.horizontal,
         itemCount: _days.length,
@@ -159,7 +156,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 onTap: () => _goToActualDay(index),
                 available: widget.selectableDayPredicate == null
                     ? true
-                    : widget.selectableDayPredicate(currentDay),
+                    : widget.selectableDayPredicate!(currentDay),
                 dayColor: widget.dayColor,
                 activeDayColor: widget.activeDayColor,
                 activeDayBackgroundColor: widget.activeBackgroundDayColor,
@@ -185,7 +182,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     return Container(
       height: 40,
       child: ScrollablePositionedList.builder(
-        initialScrollIndex: _monthSelectedIndex,
+        initialScrollIndex: _monthSelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
         itemScrollController: _controllerMonth,
         padding: EdgeInsets.only(left: widget.leftMargin),
@@ -210,6 +207,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                     child: YearItem(
                       name: DateFormat.y(_locale).format(currentDate),
                       color: widget.monthColor,
+                      onTap: (){},
                     ),
                   ),
                 MonthItem(
@@ -238,7 +236,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     return Container(
       height: 40,
       child: ScrollablePositionedList.builder(
-        initialScrollIndex: _yearSelectedIndex,
+        initialScrollIndex: _yearSelectedIndex!,
         initialAlignment: _scrollAlignment,
         itemScrollController: _controllerYear,
         padding: EdgeInsets.only(left: widget.leftMargin),
@@ -280,10 +278,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   /// when the [selectedDate.month] is not the first or the last in [widget.firstDate] or [widget.lastDate].
   /// In that case it will only show the allowed days from and up to the specified in [widget.firstDate]
   /// and [widget.lastDate]
-  _generateDays(DateTime selectedDate) {
+  _generateDays(DateTime? selectedDate) {
     _days.clear();
     for (var i = 1; i <= 31; i++) {
-      final day = DateTime(selectedDate.year, selectedDate.month, i);
+      final day = DateTime(selectedDate!.year, selectedDate.month, i);
       if (day.difference(widget.firstDate).inDays < 0) continue;
       if (day.month != selectedDate.month || day.isAfter(widget.lastDate))
         break;
@@ -296,10 +294,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   /// In that case it will only from and up to the allowed months in [widget.firstDate] and [widget.lastDate].
   /// By default, when [widget.showYears] is false, it will add all months from [widget.firstDate] to
   /// [widget.lastDate] and all in between
-  _generateMonths(DateTime selectedDate) {
+  _generateMonths(DateTime? selectedDate) {
     _months.clear();
     if (widget.showYears) {
-      int month = selectedDate.year == widget.firstDate.year
+      int month = selectedDate!.year == widget.firstDate.year
           ? widget.firstDate.month
           : 1;
       DateTime date = DateTime(selectedDate.year, month);
@@ -329,23 +327,22 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   /// It will reset the calendar to the initial date
   _resetCalendar(DateTime date) {
-    if (widget.showYears) _generateMonths(date);
+    if (widget.showYears) {
+      _generateMonths(date);
+      _moveToMonthIndex(_monthSelectedIndex ?? 0);
+    }
     _generateDays(date);
-    _daySelectedIndex = date.month == _selectedDate.month
+    _daySelectedIndex = date.month == _selectedDate!.month
         ? _days.indexOf(
-            _days.firstWhere((dayDate) => dayDate.day == _selectedDate.day))
+            _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day))
         : null;
-    _controllerDay.scrollTo(
-      index: _daySelectedIndex ?? 0,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    _moveToDayIndex(_daySelectedIndex ?? 0);
   }
 
   _goToActualYear(int index) {
     _moveToYearIndex(index);
     _yearSelectedIndex = index;
+    _monthSelectedIndex = null;
     _resetCalendar(_years[index]);
     setState(() {});
   }
@@ -415,13 +412,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   /// Initializes the calendar. It will be executed every time a new date is selected
   _initCalendar() {
     _selectedDate = widget.initialDate;
-    _generateMonths(_selectedDate);
-    _generateDays(_selectedDate);
     if (widget.showYears) {
       _generateYears();
       selectedYear();
     }
+    _generateMonths(_selectedDate);
     selectedMonth();
+    _generateDays(_selectedDate);
     selectedDay();
   }
 }

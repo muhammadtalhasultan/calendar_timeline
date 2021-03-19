@@ -6,18 +6,18 @@ class DayItem extends StatelessWidget {
   final String shortName;
   final bool isSelected;
   final Function onTap;
-  final Color dayColor;
-  final Color activeDayColor;
-  final Color activeDayBackgroundColor;
+  final Color? dayColor;
+  final Color? activeDayColor;
+  final Color? activeDayBackgroundColor;
   final bool available;
-  final Color dotsColor;
-  final Color dayNameColor;
+  final Color? dotsColor;
+  final Color? dayNameColor;
 
   const DayItem({
-    Key key,
-    @required this.dayNumber,
-    @required this.shortName,
-    @required this.onTap,
+    Key? key,
+    required this.dayNumber,
+    required this.shortName,
+    required this.onTap,
     this.isSelected = false,
     this.dayColor,
     this.activeDayColor,
@@ -48,7 +48,7 @@ class DayItem extends StatelessWidget {
     );
 
     return GestureDetector(
-      onTap: available ? onTap : null,
+      onTap: available ? onTap as void Function()? : null,
       child: Container(
         decoration: isSelected
           ? BoxDecoration(

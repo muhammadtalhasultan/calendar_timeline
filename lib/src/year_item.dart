@@ -7,12 +7,12 @@ class YearItem extends StatelessWidget {
   final String name;
   final Function onTap;
   final bool isSelected;
-  final Color color;
+  final Color? color;
   final bool small;
 
   YearItem({
-    @required this.name,
-    @required this.onTap,
+    required this.name,
+    required this.onTap,
     this.isSelected = false,
     this.small = true,
     this.color
@@ -21,7 +21,7 @@ class YearItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: small ? null : onTap,
+      onTap: small ? null : onTap as void Function()?,
       child: Container(
         decoration: isSelected || small
           ? BoxDecoration(
