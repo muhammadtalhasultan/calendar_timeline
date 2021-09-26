@@ -8,9 +8,19 @@ abstract class ParamFactory {
   static const String unCapitalizedString = "string";
   static const String capitalizedString = "String";
   static const String dayName = "MON";
+  static const String monthName = "April";
 
   // Color
   static const Color activeColor = Colors.redAccent;
+  static const Color textColor = Colors.blueAccent;
+
+  // bool
+  static const bool isNotSelected = false;
+  static const bool isSelected = true;
+
+  // FontWeight
+  static const FontWeight bold = FontWeight.bold;
+  static const FontWeight light = FontWeight.w300;
 
   // Functions
   static bool isContainerWithColor(Widget widget, Color color) {
@@ -29,5 +39,11 @@ abstract class ParamFactory {
     if (widget is! Text || widget.style == null) return false;
 
     return widget.style!.color == color;
+  }
+
+  static bool isTextWithCFontWeight(Widget widget, FontWeight fontWeight) {
+    if (widget is! Text || widget.style == null) return false;
+
+    return widget.style!.fontWeight == fontWeight;
   }
 }
