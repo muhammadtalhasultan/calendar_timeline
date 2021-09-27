@@ -62,7 +62,7 @@ void main() {
             );
 
             var widget = find.byWidgetPredicate(
-              (widget) => ParamFactory.isTextWithCFontWeight(
+              (widget) => ParamFactory.isTextWithFontWeight(
                 widget,
                 FontWeight.w300,
               ),
@@ -78,7 +78,7 @@ void main() {
             );
 
             widget = find.byWidgetPredicate(
-              (widget) => ParamFactory.isTextWithCFontWeight(
+              (widget) => ParamFactory.isTextWithFontWeight(
                 widget,
                 FontWeight.bold,
               ),
