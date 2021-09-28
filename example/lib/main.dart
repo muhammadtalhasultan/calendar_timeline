@@ -1,6 +1,7 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,6 +15,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('es'),
+        const Locale('en'),
+      ],
       home: HomePage(),
     );
   }
@@ -53,7 +63,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             CalendarTimeline(
-              showYears: false,
+              showYears: true,
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(Duration(days: 365)),

@@ -99,7 +99,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void initState() {
     super.initState();
     _initCalendar();
-    _scrollAlignment = widget.leftMargin / 440;
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       initializeDateFormatting(_locale);
     });
@@ -117,6 +116,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   @override
   Widget build(BuildContext context) {
+    _scrollAlignment = widget.leftMargin / MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
