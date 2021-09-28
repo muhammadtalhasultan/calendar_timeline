@@ -1,4 +1,4 @@
-## 1.0.0 - 28/09/2021
+## 1.0.2-null-safety.0 - 28/09/2021
 
 * Add widget testing
 * Fix error with padding in different screens widths
