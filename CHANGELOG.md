@@ -1,3 +1,8 @@
+## 1.0.0 - 28/09/2021
+
+* Add widget testing
+* Fix error with padding in different screens widths
+
 ## 1.0.1-null-safety.0 - 11/05/2021
 
 * Fix error with intl if flutter_localization not configured
