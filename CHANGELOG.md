@@ -1,3 +1,7 @@
+## 1.0.3-null-safety.0 - 29/09/2021
+
+* Fix error locale data has not been initialized
+
 ## 1.0.2-null-safety.0 - 28/09/2021
 
 * Add widget testing

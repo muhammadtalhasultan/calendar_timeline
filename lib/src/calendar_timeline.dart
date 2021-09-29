@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -98,10 +97,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   @override
   void initState() {
     super.initState();
+    initializeDateFormatting(_locale);
     _initCalendar();
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      initializeDateFormatting(_locale);
-    });
   }
 
   /// Refreshes the calendar when a day, month or year is selected
