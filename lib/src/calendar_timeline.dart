@@ -90,20 +90,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   List<DateTime> _days = [];
   DateTime? _selectedDate;
 
-  String get _locale =>
-      widget.locale ?? Localizations.localeOf(context).languageCode;
+  late String _locale;
 
-  /// Populates the calendar and animates to the [widget.initialDate]
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      initializeDateFormatting(_locale);
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _initCalendar();
   }
 
-  /// Refreshes the calendar when a day, month or year is selected
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -410,6 +404,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   /// Initializes the calendar. It will be executed every time a new date is selected
   _initCalendar() {
+    _locale = widget.locale ?? Localizations.localeOf(context).languageCode;
+    initializeDateFormatting(_locale);
     _selectedDate = widget.initialDate;
     if (widget.showYears) {
       _generateYears();

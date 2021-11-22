@@ -1,3 +1,8 @@
+## 1.0.4 - 22/11/2021
+
+* Fix error when not set locale parameter
+* Final null-safety version
+
 ## 1.0.3-null-safety.0 - 29/09/2021
 
 * Fix error locale data has not been initialized
