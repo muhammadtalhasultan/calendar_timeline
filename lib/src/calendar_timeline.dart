@@ -97,7 +97,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting(_locale);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      initializeDateFormatting(_locale);
+    });
     _initCalendar();
   }
 
