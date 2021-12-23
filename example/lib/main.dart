@@ -1,7 +1,6 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,15 +14,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('es'),
-        const Locale('en'),
-      ],
       home: HomePage(),
     );
   }
@@ -35,7 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   DateTime _selectedDate;
 
   @override
@@ -60,13 +49,11 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Calendar Timeline',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(color: Colors.tealAccent[100]),
+                style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
+              showYears: true,
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(Duration(days: 365)),
@@ -88,8 +75,8 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 16),
-              child: FlatButton(
-                color: Colors.teal[200],
+              child: TextButton(
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal[200])),
                 child: Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
                 onPressed: () => setState(() => _resetSelectedDate()),
               ),

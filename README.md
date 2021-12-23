@@ -24,6 +24,7 @@ You can use this package when you need to add a date picker that takes up little
 | activeBackgroundDayColor | Color                  | Color for selected day background                           |
 | dotColor                 | Color                  | Color for top dots in select day                            |
 | locale                   | String                 | Locale string to get formatted date                         |
+| showYears                | bool                   | Indicates if it show year selector                           |
 
 
 ## Use example

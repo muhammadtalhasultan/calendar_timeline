@@ -1,3 +1,33 @@
+## 1.0.4 - 22/11/2021
+
+* Fix error when not set locale parameter
+* Final null-safety version
+
+## 1.0.3-null-safety.0 - 29/09/2021
+
+* Fix error locale data has not been initialized
+
+## 1.0.2-null-safety.0 - 28/09/2021
+
+* Add widget testing
+* Fix error with padding in different screens widths
+
+## 1.0.1-null-safety.0 - 11/05/2021
+
+* Fix error with intl if flutter_localization not configured
+
+## 1.0.0-null-safety.0 - 19/03/2021
+
+* Migrate to null safety
+
+## 0.7.1 - 09/03/2021
+
+* Update packages
+
+## 0.7.0 - 17/12/2020
+
+* Added option to see years individually. Thanks to https://github.com/Flucadetena.
+
 ## 0.6.3 - 10/08/2020
 
 * Fix error when generating the abbreviation of the day of the week in different locales
