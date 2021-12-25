@@ -32,12 +32,12 @@ class DayItem extends StatelessWidget {
 
   _buildDay(BuildContext context) {
     final textStyle = TextStyle(
-      color: available
-        ? dayColor ?? Theme.of(context).colorScheme.secondary
-        : dayColor?.withOpacity(0.5) ??
-        Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-      fontSize: 32,
-      fontWeight: FontWeight.normal);
+        color: available
+            ? dayColor ?? Theme.of(context).colorScheme.secondary
+            : dayColor?.withOpacity(0.5) ??
+                Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+        fontSize: 32,
+        fontWeight: FontWeight.normal);
     final selectedStyle = TextStyle(
       color: activeDayColor ?? Colors.white,
       fontSize: 32,
@@ -49,22 +49,22 @@ class DayItem extends StatelessWidget {
       onTap: available ? onTap as void Function()? : null,
       child: Container(
         decoration: isSelected
-          ? BoxDecoration(
-          color:
-          activeDayBackgroundColor ?? Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(12.0),
-        )
-          : BoxDecoration(color: Colors.transparent),
+            ? BoxDecoration(
+                color: activeDayBackgroundColor ??
+                    Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(12.0),
+              )
+            : const BoxDecoration(color: Colors.transparent),
         height: height,
         width: width,
         child: Column(
           children: <Widget>[
             if (isSelected) ...[
-              SizedBox(height: 7),
+              const SizedBox(height: 7),
               _buildDots(),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
             ] else
-              SizedBox(height: 14),
+              const SizedBox(height: 14),
             Text(
               dayNumber.toString(),
               style: isSelected ? selectedStyle : textStyle,
@@ -88,8 +88,8 @@ class DayItem extends StatelessWidget {
     final dot = Container(
       height: 5,
       width: 5,
-      decoration: new BoxDecoration(
-        color: this.dotsColor ?? this.activeDayColor ?? Colors.white,
+      decoration: BoxDecoration(
+        color: dotsColor ?? activeDayColor ?? Colors.white,
         shape: BoxShape.circle,
       ),
     );

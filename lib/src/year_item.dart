@@ -10,13 +10,14 @@ class YearItem extends StatelessWidget {
   final Color? color;
   final bool small;
 
-  YearItem({
-    required this.name,
-    required this.onTap,
-    this.isSelected = false,
-    this.small = true,
-    this.color
-  });
+  const YearItem(
+      {Key? key,
+      required this.name,
+      required this.onTap,
+      this.isSelected = false,
+      this.small = true,
+      this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +25,11 @@ class YearItem extends StatelessWidget {
       onTap: small ? null : onTap as void Function()?,
       child: Container(
         decoration: isSelected || small
-          ? BoxDecoration(
-          border: Border.all(color: color ?? Colors.black87, width: 1),
-          borderRadius: BorderRadius.circular(4),
-        )
-          : null,
+            ? BoxDecoration(
+                border: Border.all(color: color ?? Colors.black87, width: 1),
+                borderRadius: BorderRadius.circular(4),
+              )
+            : null,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 5.0),
           child: Text(

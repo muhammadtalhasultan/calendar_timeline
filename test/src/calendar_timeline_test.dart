@@ -144,14 +144,13 @@ void main() {
             'when tap a day or month call [onDateSelected]',
             (WidgetTester tester) async {
               var methodCalls = 0;
-              final onTap = () => methodCalls++;
 
               await tester.pumpApp(
                 CalendarTimeline(
                   firstDate: ParamFactory.firstDate,
                   lastDate: ParamFactory.lastDate,
                   initialDate: ParamFactory.initialDate,
-                  onDateSelected: (dateTime) => onTap(),
+                  onDateSelected: (dateTime) => methodCalls++,
                 ),
               );
 

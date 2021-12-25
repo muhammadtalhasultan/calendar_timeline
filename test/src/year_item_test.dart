@@ -10,6 +10,7 @@ void main() {
     home: Scaffold(
         body: YearItem(
       name: 'year',
+      // ignore: avoid_print
       onTap: () => print('onTap'),
     )),
   );
@@ -130,13 +131,12 @@ void main() {
             '[onTap] callback when widget is tapped and it is not small',
             (WidgetTester tester) async {
               var functionCalls = 0;
-              final onTap = () => functionCalls++;
 
               await tester.pumpApp(
                 YearItem(
                   name: ParamFactory.yearName,
                   small: ParamFactory.isNotSmall,
-                  onTap: onTap,
+                  onTap: () => functionCalls++,
                 ),
               );
               expect(functionCalls, isZero);
@@ -148,15 +148,14 @@ void main() {
           );
           testWidgets(
             '[onTap] is not called when widget is tapped and it is small',
-                (WidgetTester tester) async {
+            (WidgetTester tester) async {
               var functionCalls = 0;
-              final onTap = () => functionCalls++;
 
               await tester.pumpApp(
                 YearItem(
                   name: ParamFactory.yearName,
                   small: ParamFactory.isSmall,
-                  onTap: onTap,
+                  onTap: () => functionCalls++,
                 ),
               );
               expect(functionCalls, isZero);

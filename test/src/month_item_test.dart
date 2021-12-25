@@ -94,13 +94,12 @@ void main() {
             '[onTap] callback when is tapped',
             (WidgetTester tester) async {
               var functionCalls = 0;
-              final onTap = () => functionCalls++;
 
               await tester.pumpApp(
                 MonthItem(
                   name: ParamFactory.monthName,
                   isSelected: ParamFactory.isSelected,
-                  onTap: onTap,
+                  onTap: () => functionCalls++,
                 ),
               );
 

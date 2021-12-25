@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _resetSelectedDate() {
-    _selectedDate = DateTime.now().add(Duration(days: 5));
+    _selectedDate = DateTime.now().add(Duration(days: 10));
   }
 
   @override
@@ -49,14 +49,17 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Calendar Timeline',
-                style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.tealAccent[100]),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
               showYears: true,
               initialDate: _selectedDate,
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(Duration(days: 365)),
+              firstDate: DateTime.now().add(Duration(days: 7)),
+              lastDate: DateTime.now().add(Duration(days: 900)),
               onDateSelected: (date) {
                 setState(() {
                   _selectedDate = date;
@@ -69,20 +72,33 @@ class _HomePageState extends State<HomePage> {
               activeDayColor: Colors.white,
               activeBackgroundDayColor: Colors.redAccent[100],
               dotsColor: Color(0xFF333A47),
-              selectableDayPredicate: (date) => date.day != 23,
+              selectableDayPredicate: (date) =>
+                  date.month != 4 && date.day != 30 && date.day != 31,
               locale: 'en',
+              onNoAvailableDate: (lastDate) {
+                print('LAST DATE: $lastDate');
+                const snackBar = SnackBar(
+                  content: Text('No dates available for this month!'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
             ),
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: TextButton(
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal[200])),
-                child: Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.teal[200])),
+                child:
+                    Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
                 onPressed: () => setState(() => _resetSelectedDate()),
               ),
             ),
             SizedBox(height: 20),
-            Center(child: Text('Selected date is $_selectedDate', style: TextStyle(color: Colors.white)))
+            Center(
+                child: Text('Selected date is $_selectedDate',
+                    style: TextStyle(color: Colors.white)))
           ],
         ),
       ),
