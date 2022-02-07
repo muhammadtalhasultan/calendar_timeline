@@ -153,7 +153,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 shortName: shortName.length > 3
                     ? shortName.substring(0, 3)
                     : shortName,
-                onTap: () => _goToActualDay(index),
+                onTap: () => _goToDay(index),
                 available: widget.selectableDayPredicate == null
                     ? true
                     : widget.selectableDayPredicate!(currentDay),
@@ -207,13 +207,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                     child: YearItem(
                       name: DateFormat.y(_locale).format(currentDate),
                       color: widget.monthColor,
-                      onTap: (){},
+                      onTap: () {},
                     ),
                   ),
                 MonthItem(
                   isSelected: _monthSelectedIndex == index,
                   name: monthName,
-                  onTap: () => _goToActualMonth(index),
+                  onTap: () => _goToMonth(index),
                   color: widget.monthColor,
                 ),
                 if (index == _months.length - 1)
@@ -256,7 +256,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 YearItem(
                   isSelected: _yearSelectedIndex == index,
                   name: yearName,
-                  onTap: () => _goToActualYear(index),
+                  onTap: () => _goToYear(index),
                   color: widget.monthColor,
                   small: false,
                 ),
@@ -326,24 +326,27 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   /// It will reset the calendar to the initial date
-  _resetCalendar(DateTime date) {
+  _updateCalendar(DateTime date) {
     if (widget.showYears) {
       _generateMonths(date);
       _moveToMonthIndex(_monthSelectedIndex ?? 0);
     }
     _generateDays(date);
-    _daySelectedIndex = date.month == _selectedDate!.month
+    _daySelectedIndex = (date.month == _selectedDate!.month) &&
+            (date.year == _selectedDate!.year)
         ? _days.indexOf(
-            _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day))
+            _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day),
+          )
         : null;
     _moveToDayIndex(_daySelectedIndex ?? 0);
   }
 
-  _goToActualYear(int index) {
+  _goToYear(int index) {
     _moveToYearIndex(index);
     _yearSelectedIndex = index;
     _monthSelectedIndex = null;
-    _resetCalendar(_years[index]);
+    _daySelectedIndex = null;
+    _updateCalendar(_years[index]);
     setState(() {});
   }
 
@@ -356,10 +359,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     );
   }
 
-  _goToActualMonth(int index) {
+  _goToMonth(int index) {
     _moveToMonthIndex(index);
     _monthSelectedIndex = index;
-    _resetCalendar(_months[index]);
+    _daySelectedIndex = null;
+    _updateCalendar(_months[index]);
     setState(() {});
   }
 
@@ -372,7 +376,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     );
   }
 
-  _goToActualDay(int index) {
+  _goToDay(int index) {
     _moveToDayIndex(index);
     _daySelectedIndex = index;
     _selectedDate = _days[index];
