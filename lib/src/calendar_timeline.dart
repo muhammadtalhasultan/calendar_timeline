@@ -326,9 +326,15 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   /// It will reset the calendar to the initial date
-  _updateCalendar(DateTime date) {
+  _updateCalendar(DateTime date, [bool updateMonth = false]) {
     if (widget.showYears) {
       _generateMonths(date);
+      // if (updateMonth && _selectedDate!.year == date.year) {
+      //   _monthSelectedIndex = _months.indexOf(
+      //     _months.firstWhere((date) => date.month == _selectedDate!.month),
+      //   );
+      // }
+
       _moveToMonthIndex(_monthSelectedIndex ?? 0);
     }
     _generateDays(date);
@@ -345,8 +351,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _moveToYearIndex(index);
     _yearSelectedIndex = index;
     _monthSelectedIndex = null;
-    _daySelectedIndex = null;
-    _updateCalendar(_years[index]);
+    //_daySelectedIndex = null;
+    _updateCalendar(_years[index], true);
     setState(() {});
   }
 
@@ -360,7 +366,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   _goToMonth(int index) {
-    _moveToMonthIndex(index);
+    //_moveToMonthIndex(index);
     _monthSelectedIndex = index;
     _daySelectedIndex = null;
     _updateCalendar(_months[index]);
@@ -377,11 +383,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   _goToDay(int index) {
-    _moveToDayIndex(index);
+    //_moveToDayIndex(index);
     _daySelectedIndex = index;
     _selectedDate = _days[index];
     widget.onDateSelected(_selectedDate);
-    setState(() {});
+    //setState(() {});
   }
 
   void _moveToDayIndex(int index) {
