@@ -110,7 +110,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     _initCalendar();
-    if (widget.showYears) _moveToYearIndex(_yearSelectedIndex ?? 0);
+    if (widget.showYears) {
+      Future.delayed(const Duration(milliseconds: 250))
+          .then((_) => _moveToYearIndex(_yearSelectedIndex ?? 0));
+    }
     _moveToMonthIndex(_monthSelectedIndex ?? 0);
     _moveToDayIndex(_daySelectedIndex ?? 0);
   }
@@ -353,12 +356,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   void _moveToYearIndex(int index) {
-    _controllerYear.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    if (_controllerYear.isAttached) {
+      _controllerYear.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
   _goToMonth(int index) {
@@ -368,12 +373,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   void _moveToMonthIndex(int index) {
-    _controllerMonth.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    if (_controllerMonth.isAttached) {
+      _controllerMonth.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
   _goToDay(int index) {
@@ -383,12 +390,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   void _moveToDayIndex(int index) {
-    _controllerDay.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    if (_controllerDay.isAttached) {
+      _controllerDay.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
   selectedYear() {
