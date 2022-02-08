@@ -329,25 +329,18 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _updateCalendar(DateTime date) {
     if (widget.showYears) {
       _generateMonths(date);
-      if (_selectedDate!.year == date.year &&
-          _monthSelectedIndex == null &&
-          _daySelectedIndex == null) {
-        _monthSelectedIndex = _months.indexOf(
-          _months.firstWhere((date) => date.month == _selectedDate!.month),
-        );
+      if (_isComeBackPreviousDate(date)) {
+        _monthSelectedIndex = _getIndexOfSelectedMonth();
       }
       _moveToMonthIndex(_monthSelectedIndex ?? 0);
     }
     _generateDays(date);
-    print(date);
-    _daySelectedIndex = _daySelectedIndex == null &&
-            date.month == _selectedDate!.month &&
-            date.year == _selectedDate!.year
-        ? _days.indexOf(
-            _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day),
-          )
-        : null;
-    _moveToDayIndex(_daySelectedIndex ?? 0);
+    _daySelectedIndex =
+        _isDayAlreadySelected(date) ? getIndexOfSelectedDay() : null;
+
+    setState(() {});
+    Future.delayed(const Duration(milliseconds: 50))
+        .then((_) => _moveToDayIndex(_daySelectedIndex ?? 0));
   }
 
   _goToYear(int index) {
@@ -355,9 +348,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _yearSelectedIndex = index;
     _monthSelectedIndex = null;
     _daySelectedIndex = null;
-    final date =_years[index];
+    final date = _years[index];
     _updateCalendar(date.year == _selectedDate!.year ? _selectedDate! : date);
-    setState(() {});
   }
 
   void _moveToYearIndex(int index) {
@@ -373,7 +365,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _monthSelectedIndex = index;
     _daySelectedIndex = null;
     _updateCalendar(_months[index]);
-    setState(() {});
   }
 
   void _moveToMonthIndex(int index) {
@@ -392,7 +383,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   void _moveToDayIndex(int index) {
-    print('------- $index');
     _controllerDay.scrollTo(
       index: index,
       alignment: _scrollAlignment,
@@ -402,14 +392,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   selectedYear() {
-    _yearSelectedIndex = _years.indexOf(_years
-        .firstWhere((yearDate) => yearDate.year == _selectedDate!.year));
+    _yearSelectedIndex = _years.indexOf(
+        _years.firstWhere((yearDate) => yearDate.year == _selectedDate!.year));
   }
 
   selectedMonth() {
     if (widget.showYears)
-      _monthSelectedIndex = _months.indexOf(_months.firstWhere(
-          (monthDate) => monthDate.month == _selectedDate!.month));
+      _monthSelectedIndex = _months.indexOf(_months
+          .firstWhere((monthDate) => monthDate.month == _selectedDate!.month));
     else
       _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
           monthDate.year == _selectedDate!.year &&
@@ -433,4 +423,21 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _generateDays(_selectedDate);
     selectedDay();
   }
+
+  bool _isComeBackPreviousDate(DateTime date) =>
+      _selectedDate!.year == date.year &&
+      _monthSelectedIndex == null &&
+      _daySelectedIndex == null;
+
+  int _getIndexOfSelectedMonth() => _months.indexOf(
+      _months.firstWhere((date) => date.month == _selectedDate!.month));
+
+  int getIndexOfSelectedDay() => _days.indexOf(
+        _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day),
+      );
+
+  bool _isDayAlreadySelected(DateTime date) =>
+      _daySelectedIndex == null &&
+      date.month == _selectedDate!.month &&
+      date.year == _selectedDate!.year;
 }
