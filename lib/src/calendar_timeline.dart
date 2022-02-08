@@ -99,6 +99,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void initState() {
     super.initState();
     _initCalendar();
+    if (widget.showYears) {
+      _moveToYearIndex(_yearSelectedIndex ?? 0);
+    }
+    _moveToMonthIndex(_monthSelectedIndex ?? 0);
+    _moveToDayIndex(_daySelectedIndex ?? 0);
     _scrollAlignment = widget.leftMargin / 440;
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       initializeDateFormatting(_locale);
