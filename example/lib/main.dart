@@ -25,7 +25,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DateTime _selectedDate;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
@@ -49,10 +49,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Calendar Timeline',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(color: Colors.tealAccent[100]),
+                style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
@@ -60,11 +57,7 @@ class _HomePageState extends State<HomePage> {
               initialDate: _selectedDate,
               firstDate: DateTime.now().add(Duration(days: 7)),
               lastDate: DateTime.now().add(Duration(days: 900)),
-              onDateSelected: (date) {
-                setState(() {
-                  _selectedDate = date;
-                });
-              },
+              onDateSelected: (date) => setState(() =>_selectedDate = date!),
               leftMargin: 20,
               monthColor: Colors.white70,
               dayColor: Colors.teal[200],
