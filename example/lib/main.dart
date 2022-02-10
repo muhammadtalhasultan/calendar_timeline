@@ -1,3 +1,4 @@
+
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late DateTime _selectedDate;
+  DateTime _selectedDate;
 
   @override
   void initState() {
@@ -49,15 +50,19 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Calendar Timeline',
-                style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.tealAccent[100]),
+                style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
               showYears: true,
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(Duration(days: 365)),
-              onDateSelected: (date) => setState(() =>_selectedDate = date!),
+              lastDate: DateTime.now().add(Duration(days: 365 * 4)),
+              onDateSelected: (date) {
+                setState(() {
+                  _selectedDate = date;
+                });
+              },
               leftMargin: 20,
               monthColor: Colors.white70,
               dayColor: Colors.teal[200],
