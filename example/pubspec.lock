@@ -21,7 +21,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.4-null-safety.0"
   characters:
     dependency: transitive
     description:
@@ -58,11 +58,6 @@ packages:
     source: hosted
     version: "1.2.0"
   flutter:
-    dependency: "direct main"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  flutter_localizations:
     dependency: "direct main"
     description: flutter
     source: sdk

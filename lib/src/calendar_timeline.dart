@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -91,13 +90,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   List<DateTime> _days = [];
   DateTime? _selectedDate;
 
-  String get _locale =>
-      widget.locale ?? Localizations.localeOf(context).languageCode;
+  late String _locale;
 
-  /// Populates the calendar and animates to the [widget.initialDate]
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _initCalendar();
     if (widget.showYears) {
       _moveToYearIndex(_yearSelectedIndex ?? 0);
@@ -110,7 +107,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     });
   }
 
-  /// Refreshes the calendar when a day, month or year is selected
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -126,6 +122,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   @override
   Widget build(BuildContext context) {
+    _scrollAlignment = widget.leftMargin / MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -430,6 +427,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   /// Initializes the calendar. It will be executed every time a new date is selected
   _initCalendar() {
+    _locale = widget.locale ?? Localizations.localeOf(context).languageCode;
+    initializeDateFormatting(_locale);
     _selectedDate = widget.initialDate;
     if (widget.showYears) {
       _generateYears();
