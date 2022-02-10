@@ -78,7 +78,7 @@ class CalendarTimeline extends StatefulWidget {
 
 class _CalendarTimelineState extends State<CalendarTimeline> {
   final ItemScrollController _controllerYear = ItemScrollController();
-  final ItemScrollController _controllerMonth = ItemScrollController();
+  ItemScrollController _controllerMonth = ItemScrollController();
   final ItemScrollController _controllerDay = ItemScrollController();
 
   int? _yearSelectedIndex;
@@ -115,6 +115,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     _initCalendar();
+    _controllerMonth = ItemScrollController();
     if (widget.showYears) {
       Future.delayed(const Duration(milliseconds: 250))
           .then((_) => _moveToYearIndex(_yearSelectedIndex ?? 0));
@@ -190,6 +191,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     return Container(
       height: 40,
       child: ScrollablePositionedList.builder(
+        key: ValueKey<bool>(widget.showYears),
         initialScrollIndex: _monthSelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
         itemScrollController: _controllerMonth,
@@ -337,11 +339,12 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _updateCalendar(DateTime date) {
     if (widget.showYears) {
       _generateMonths(date);
-      if (_isComeBackPreviousDate(date)) {
-        _monthSelectedIndex = _getIndexOfSelectedMonth();
-      }
-      _moveToMonthIndex(_monthSelectedIndex ?? 0);
     }
+    if (_isComeBackPreviousDate(date)) {
+      _monthSelectedIndex = _getIndexOfSelectedMonth();
+    }
+    Future.delayed(const Duration(milliseconds: 50))
+        .then((_) => _moveToMonthIndex(_monthSelectedIndex ?? 0));
     _generateDays(date);
     _daySelectedIndex =
         _isDayAlreadySelected(date) ? getIndexOfSelectedDay() : null;
