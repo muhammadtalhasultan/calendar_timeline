@@ -77,7 +77,7 @@ class CalendarTimeline extends StatefulWidget {
 
 class _CalendarTimelineState extends State<CalendarTimeline> {
   final ItemScrollController _controllerYear = ItemScrollController();
-  final ItemScrollController _controllerMonth = ItemScrollController();
+  ItemScrollController _controllerMonth = ItemScrollController();
   final ItemScrollController _controllerDay = ItemScrollController();
 
   int? _yearSelectedIndex;
@@ -96,13 +96,26 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _initCalendar();
+    if (widget.showYears) {
+      _moveToYearIndex(_yearSelectedIndex ?? 0);
+    }
+    _moveToMonthIndex(_monthSelectedIndex ?? 0);
+    _moveToDayIndex(_daySelectedIndex ?? 0);
+    _scrollAlignment = widget.leftMargin / 440;
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      initializeDateFormatting(_locale);
+    });
   }
 
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     _initCalendar();
-    if (widget.showYears) _moveToYearIndex(_yearSelectedIndex ?? 0);
+    _controllerMonth = ItemScrollController();
+    if (widget.showYears) {
+      Future.delayed(const Duration(milliseconds: 250))
+          .then((_) => _moveToYearIndex(_yearSelectedIndex ?? 0));
+    }
     _moveToMonthIndex(_monthSelectedIndex ?? 0);
     _moveToDayIndex(_daySelectedIndex ?? 0);
   }
@@ -146,7 +159,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 shortName: shortName.length > 3
                     ? shortName.substring(0, 3)
                     : shortName,
-                onTap: () => _goToActualDay(index),
+                onTap: () => _goToDay(index),
                 available: widget.selectableDayPredicate == null
                     ? true
                     : widget.selectableDayPredicate!(currentDay),
@@ -175,6 +188,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     return Container(
       height: 40,
       child: ScrollablePositionedList.builder(
+        key: ValueKey<bool>(widget.showYears),
         initialScrollIndex: _monthSelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
         itemScrollController: _controllerMonth,
@@ -200,13 +214,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                     child: YearItem(
                       name: DateFormat.y(_locale).format(currentDate),
                       color: widget.monthColor,
-                      onTap: (){},
+                      onTap: () {},
                     ),
                   ),
                 MonthItem(
                   isSelected: _monthSelectedIndex == index,
                   name: monthName,
-                  onTap: () => _goToActualMonth(index),
+                  onTap: () => _goToMonth(index),
                   color: widget.monthColor,
                 ),
                 if (index == _months.length - 1)
@@ -249,7 +263,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 YearItem(
                   isSelected: _yearSelectedIndex == index,
                   name: yearName,
-                  onTap: () => _goToActualYear(index),
+                  onTap: () => _goToYear(index),
                   color: widget.monthColor,
                   small: false,
                 ),
@@ -319,87 +333,96 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   /// It will reset the calendar to the initial date
-  _resetCalendar(DateTime date) {
+  _updateCalendar(DateTime date) {
     if (widget.showYears) {
       _generateMonths(date);
-      _moveToMonthIndex(_monthSelectedIndex ?? 0);
     }
+    if (_isComeBackPreviousDate(date)) {
+      _monthSelectedIndex = _getIndexOfSelectedMonth();
+    }
+    Future.delayed(const Duration(milliseconds: 50))
+        .then((_) => _moveToMonthIndex(_monthSelectedIndex ?? 0));
     _generateDays(date);
-    _daySelectedIndex = date.month == _selectedDate!.month
-        ? _days.indexOf(
-            _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day))
-        : null;
-    _moveToDayIndex(_daySelectedIndex ?? 0);
+    _daySelectedIndex =
+        _isDayAlreadySelected(date) ? getIndexOfSelectedDay() : null;
+
+    setState(() {});
+    Future.delayed(const Duration(milliseconds: 50))
+        .then((_) => _moveToDayIndex(_daySelectedIndex ?? 0));
   }
 
-  _goToActualYear(int index) {
+  _goToYear(int index) {
     _moveToYearIndex(index);
     _yearSelectedIndex = index;
     _monthSelectedIndex = null;
-    _resetCalendar(_years[index]);
-    setState(() {});
+    _daySelectedIndex = null;
+    final date = _years[index];
+    _updateCalendar(date.year == _selectedDate!.year ? _selectedDate! : date);
   }
 
   void _moveToYearIndex(int index) {
-    _controllerYear.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    if (_controllerYear.isAttached) {
+      _controllerYear.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
-  _goToActualMonth(int index) {
-    _moveToMonthIndex(index);
+  _goToMonth(int index) {
     _monthSelectedIndex = index;
-    _resetCalendar(_months[index]);
-    setState(() {});
+    _daySelectedIndex = null;
+    _updateCalendar(_months[index]);
   }
 
   void _moveToMonthIndex(int index) {
-    _controllerMonth.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    if (_controllerMonth.isAttached) {
+      _controllerMonth.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
-  _goToActualDay(int index) {
-    _moveToDayIndex(index);
+  _goToDay(int index) {
     _daySelectedIndex = index;
     _selectedDate = _days[index];
     widget.onDateSelected(_selectedDate);
-    setState(() {});
   }
 
   void _moveToDayIndex(int index) {
-    _controllerDay.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    if (_controllerDay.isAttached) {
+      _controllerDay.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
   }
 
   selectedYear() {
-    _yearSelectedIndex = _years.indexOf(_years
-        .firstWhere((yearDate) => yearDate.year == widget.initialDate.year));
+    _yearSelectedIndex = _years.indexOf(
+        _years.firstWhere((yearDate) => yearDate.year == _selectedDate!.year));
   }
 
   selectedMonth() {
     if (widget.showYears)
-      _monthSelectedIndex = _months.indexOf(_months.firstWhere(
-          (monthDate) => monthDate.month == widget.initialDate.month));
+      _monthSelectedIndex = _months.indexOf(_months
+          .firstWhere((monthDate) => monthDate.month == _selectedDate!.month));
     else
       _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
-          monthDate.year == widget.initialDate.year &&
-          monthDate.month == widget.initialDate.month));
+          monthDate.year == _selectedDate!.year &&
+          monthDate.month == _selectedDate!.month));
   }
 
   selectedDay() {
     _daySelectedIndex = _days.indexOf(
-        _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day));
+        _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day));
   }
 
   /// Initializes the calendar. It will be executed every time a new date is selected
@@ -416,4 +439,21 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _generateDays(_selectedDate);
     selectedDay();
   }
+
+  bool _isComeBackPreviousDate(DateTime date) =>
+      _selectedDate!.year == date.year &&
+      _monthSelectedIndex == null &&
+      _daySelectedIndex == null;
+
+  int _getIndexOfSelectedMonth() => _months.indexOf(
+      _months.firstWhere((date) => date.month == _selectedDate!.month));
+
+  int getIndexOfSelectedDay() => _days.indexOf(
+        _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day),
+      );
+
+  bool _isDayAlreadySelected(DateTime date) =>
+      _daySelectedIndex == null &&
+      date.month == _selectedDate!.month &&
+      date.year == _selectedDate!.year;
 }
