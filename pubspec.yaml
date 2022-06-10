@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0
-  scrollable_positioned_list: ^0.2.3
+  scrollable_positioned_list: ^0.3.2
 
 dev_dependencies:
   flutter_test:
