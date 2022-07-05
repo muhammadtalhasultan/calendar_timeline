@@ -1,4 +1,3 @@
-
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +25,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DateTime _selectedDate;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
@@ -35,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _resetSelectedDate() {
-    _selectedDate = DateTime.now().add(Duration(days: 5));
+    _selectedDate = DateTime.now().add(Duration(days: 2));
   }
 
   @override
@@ -50,7 +49,10 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Calendar Timeline',
-                style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.tealAccent[100]),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(color: Colors.tealAccent[100]),
               ),
             ),
             CalendarTimeline(
@@ -58,11 +60,7 @@ class _HomePageState extends State<HomePage> {
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(Duration(days: 365 * 4)),
-              onDateSelected: (date) {
-                setState(() {
-                  _selectedDate = date;
-                });
-              },
+              onDateSelected: (date) => setState(() => _selectedDate = date),
               leftMargin: 20,
               monthColor: Colors.white70,
               dayColor: Colors.teal[200],
@@ -77,13 +75,23 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: TextButton(
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal[200])),
-                child: Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.teal[200]),
+                ),
+                child: Text(
+                  'RESET',
+                  style: TextStyle(color: Color(0xFF333A47)),
+                ),
                 onPressed: () => setState(() => _resetSelectedDate()),
               ),
             ),
             SizedBox(height: 20),
-            Center(child: Text('Selected date is $_selectedDate', style: TextStyle(color: Colors.white)))
+            Center(
+              child: Text(
+                'Selected date is $_selectedDate',
+                style: TextStyle(color: Colors.white),
+              ),
+            )
           ],
         ),
       ),

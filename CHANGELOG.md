@@ -1,3 +1,8 @@
+## 1.0.5 - 17/02/2022
+
+* Improve behavior and fixed errors
+* Add web support and migrate to null safety example project
+
 ## 1.0.4 - 22/11/2021
 
 * Fix error when not set locale parameter

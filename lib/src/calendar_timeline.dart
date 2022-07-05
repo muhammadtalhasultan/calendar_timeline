@@ -8,7 +8,7 @@ import 'month_item.dart';
 import 'util/utils.dart';
 import 'year_item.dart';
 
-typedef OnDateSelected = void Function(DateTime?);
+typedef OnDateSelected = void Function(DateTime);
 
 /// Creates a minimal, small profile calendar to select specific dates.
 /// [initialDate] must not be [null], the same or after [firstDate] and
@@ -77,7 +77,7 @@ class CalendarTimeline extends StatefulWidget {
 
 class _CalendarTimelineState extends State<CalendarTimeline> {
   final ItemScrollController _controllerYear = ItemScrollController();
-  ItemScrollController _controllerMonth = ItemScrollController();
+  final ItemScrollController _controllerMonth = ItemScrollController();
   final ItemScrollController _controllerDay = ItemScrollController();
 
   int? _yearSelectedIndex;
@@ -88,7 +88,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   List<DateTime> _years = [];
   List<DateTime> _months = [];
   List<DateTime> _days = [];
-  DateTime? _selectedDate;
+  late DateTime _selectedDate;
 
   late String _locale;
 
@@ -96,28 +96,201 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _initCalendar();
-    if (widget.showYears) {
-      _moveToYearIndex(_yearSelectedIndex ?? 0);
-    }
-    _moveToMonthIndex(_monthSelectedIndex ?? 0);
-    _moveToDayIndex(_daySelectedIndex ?? 0);
-    _scrollAlignment = widget.leftMargin / 440;
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      initializeDateFormatting(_locale);
-    });
   }
 
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _initCalendar();
-    _controllerMonth = ItemScrollController();
-    if (widget.showYears) {
-      Future.delayed(const Duration(milliseconds: 250))
-          .then((_) => _moveToYearIndex(_yearSelectedIndex ?? 0));
+    if (widget.initialDate != _selectedDate ||
+        widget.showYears != oldWidget.showYears) {
+      _initCalendar();
     }
+  }
+
+  /// Initializes the calendar. It will be executed every time a new date is selected
+  _initCalendar() {
+    _locale = widget.locale ?? Localizations.localeOf(context).languageCode;
+    initializeDateFormatting(_locale);
+    _selectedDate = widget.initialDate;
+    if (widget.showYears) {
+      _generateYears();
+      _selectedYearIndex();
+      _moveToYearIndex(_yearSelectedIndex ?? 0);
+    }
+    _generateMonths(_selectedDate);
+    _selectedMonthIndex();
     _moveToMonthIndex(_monthSelectedIndex ?? 0);
+    _generateDays(_selectedDate);
+    _selectedDayIndex();
     _moveToDayIndex(_daySelectedIndex ?? 0);
+  }
+
+  /// It will populate the [_years] list with the years between firstDate and lastDate
+  _generateYears() {
+    _years.clear();
+    DateTime date = widget.firstDate;
+    while (date.isBefore(widget.lastDate)) {
+      _years.add(date);
+      date = DateTime(date.year + 1);
+    }
+  }
+
+  /// It will populate the [_months] list. If [widget.showYears] is true, it will add from January
+  /// to December, unless the selected year is the [widget.firstDate.year] or the [widget.lastDate.year].
+  /// In that case it will only from and up to the allowed months in [widget.firstDate] and [widget.lastDate].
+  /// By default, when [widget.showYears] is false, it will add all months from [widget.firstDate] to
+  /// [widget.lastDate] and all in between
+  _generateMonths(DateTime? selectedDate) {
+    _months.clear();
+    if (widget.showYears) {
+      int month = selectedDate!.year == widget.firstDate.year
+          ? widget.firstDate.month
+          : 1;
+      DateTime date = DateTime(selectedDate.year, month);
+      while (date.isBefore(DateTime(selectedDate.year + 1)) &&
+          date.isBefore(widget.lastDate)) {
+        _months.add(date);
+        date = DateTime(date.year, date.month + 1);
+      }
+    } else {
+      DateTime date = DateTime(widget.firstDate.year, widget.firstDate.month);
+      while (date.isBefore(widget.lastDate)) {
+        _months.add(date);
+        date = DateTime(date.year, date.month + 1);
+      }
+    }
+  }
+
+  /// It will populate the [_days] list with all the allowed days. Adding all days of the month
+  /// when the [selectedDate.month] is not the first or the last in [widget.firstDate] or [widget.lastDate].
+  /// In that case it will only show the allowed days from and up to the specified in [widget.firstDate]
+  /// and [widget.lastDate]
+  _generateDays(DateTime? selectedDate) {
+    _days.clear();
+    for (var i = 1; i <= 31; i++) {
+      final day = DateTime(selectedDate!.year, selectedDate.month, i);
+      if (day.difference(widget.firstDate).inDays < 0) continue;
+      if (day.month != selectedDate.month || day.isAfter(widget.lastDate))
+        break;
+      _days.add(day);
+    }
+  }
+
+  _selectedYearIndex() {
+    _yearSelectedIndex = _years.indexOf(
+        _years.firstWhere((yearDate) => yearDate.year == _selectedDate.year));
+  }
+
+  _selectedMonthIndex() {
+    if (widget.showYears)
+      _monthSelectedIndex = _months.indexOf(_months
+          .firstWhere((monthDate) => monthDate.month == _selectedDate.month));
+    else
+      _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
+          monthDate.year == _selectedDate.year &&
+          monthDate.month == _selectedDate.month));
+  }
+
+  _selectedDayIndex() {
+    _daySelectedIndex = _days.indexOf(
+        _days.firstWhere((dayDate) => dayDate.day == _selectedDate.day));
+  }
+
+  /// Scroll to index year
+  void _moveToYearIndex(int index) {
+    if (_controllerYear.isAttached) {
+      _controllerYear.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
+  }
+
+  /// Scroll to index month
+  void _moveToMonthIndex(int index) {
+    if (_controllerMonth.isAttached) {
+      _controllerMonth.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
+  }
+
+  /// Scroll to index day
+  void _moveToDayIndex(int index) {
+    if (_controllerDay.isAttached) {
+      _controllerDay.scrollTo(
+        index: index,
+        alignment: _scrollAlignment,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    }
+  }
+
+  _onSelectYear(int index) {
+    // Move to selected year
+    _yearSelectedIndex = index;
+    _moveToYearIndex(index);
+
+    // Reset month and day index
+    _monthSelectedIndex = null;
+    _daySelectedIndex = null;
+
+    // Regenerate months and days
+    final date = _years[index];
+    if (widget.showYears) {
+      _generateMonths(date);
+      _moveToMonthIndex(0);
+    }
+    _generateDays(date);
+    _moveToDayIndex(0);
+    setState(() {});
+  }
+
+  _onSelectMonth(int index) {
+    // Move to selected month
+    _monthSelectedIndex = index;
+    _moveToMonthIndex(index);
+
+    // Reset day index
+    _daySelectedIndex = null;
+
+    // Regenerate days
+    _generateDays(_months[index]);
+    _moveToDayIndex(0);
+    setState(() {});
+  }
+
+  _onSelectDay(int index) {
+    // Move to selected day
+    _daySelectedIndex = index;
+    _moveToDayIndex(index);
+    setState(() {});
+
+    // Notify to callback
+    _selectedDate = _days[index];
+    widget.onDateSelected(_selectedDate);
+  }
+
+  bool _isSelectedDay(int index) => _monthSelectedIndex != null &&
+      (index == _daySelectedIndex || index == _indexOfDay(_selectedDate));
+
+  int _indexOfDay(DateTime date) {
+    try {
+      return _days.indexOf(
+        _days.firstWhere((dayDate) =>
+            dayDate.day == date.day &&
+            dayDate.month == date.month &&
+            dayDate.year == date.year),
+      );
+    } catch (_) {
+      return -1;
+    }
   }
 
   @override
@@ -134,47 +307,46 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     );
   }
 
-  /// Creates the row with the day of the [selectedDate.month]. If the
-  /// [selectedDate.year] && [selectedDate.month] is the [widget.firstDate] or [widget.lastDate]
-  /// the days show will be the available
-  SizedBox _buildDayList() {
-    return SizedBox(
-      height: 75,
+  /// Creates the row with all the years in the calendar. It will only show if
+  /// [widget.showYears] is set to true. It is false by default
+  Widget _buildYearList() {
+    return Container(
+      key: Key('ScrollableYearList'),
+      height: 40,
       child: ScrollablePositionedList.builder(
-        itemScrollController: _controllerDay,
-        initialScrollIndex: _daySelectedIndex ?? 0,
+        initialScrollIndex: _yearSelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
+        itemScrollController: _controllerYear,
+        padding: EdgeInsets.only(left: widget.leftMargin),
         scrollDirection: Axis.horizontal,
-        itemCount: _days.length,
-        padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
+        itemCount: _years.length,
         itemBuilder: (BuildContext context, int index) {
-          final currentDay = _days[index];
-          final shortName =
-              DateFormat.E(_locale).format(currentDay).capitalize();
-          return Row(
-            children: <Widget>[
-              DayItem(
-                isSelected: _daySelectedIndex == index,
-                dayNumber: currentDay.day,
-                shortName: shortName.length > 3
-                    ? shortName.substring(0, 3)
-                    : shortName,
-                onTap: () => _goToDay(index),
-                available: widget.selectableDayPredicate == null
-                    ? true
-                    : widget.selectableDayPredicate!(currentDay),
-                dayColor: widget.dayColor,
-                activeDayColor: widget.activeDayColor,
-                activeDayBackgroundColor: widget.activeBackgroundDayColor,
-                dotsColor: widget.dotsColor,
-                dayNameColor: widget.dayNameColor,
-              ),
-              if (index == _days.length - 1)
-                SizedBox(
+          final currentDate = _years[index];
+          final yearName = DateFormat.y(_locale).format(currentDate);
+
+          return Padding(
+            padding: const EdgeInsets.only(right: 12.0, left: 4.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                YearItem(
+                  isSelected: _yearSelectedIndex == index,
+                  name: yearName,
+                  onTap: () => _onSelectYear(index),
+                  color: widget.monthColor,
+                  small: false,
+                ),
+                if (index == _years.length - 1)
+                  // Last element to take space to do scroll to left side
+                  SizedBox(
                     width: MediaQuery.of(context).size.width -
                         widget.leftMargin -
-                        65)
-            ],
+                        (yearName.length * 10),
+                  )
+              ],
+            ),
           );
         },
       ),
@@ -188,7 +360,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     return Container(
       height: 40,
       child: ScrollablePositionedList.builder(
-        key: ValueKey<bool>(widget.showYears),
         initialScrollIndex: _monthSelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
         itemScrollController: _controllerMonth,
@@ -220,10 +391,11 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 MonthItem(
                   isSelected: _monthSelectedIndex == index,
                   name: monthName,
-                  onTap: () => _goToMonth(index),
+                  onTap: () => _onSelectMonth(index),
                   color: widget.monthColor,
                 ),
                 if (index == _months.length - 1)
+                  // Last element to take space to do scroll to left side
                   SizedBox(
                     width: MediaQuery.of(context).size.width -
                         widget.leftMargin -
@@ -237,223 +409,52 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     );
   }
 
-  /// Creates the row with all the years in the calendar. It will only show if
-  /// [widget.showYears] is set to true. It is false by default
-  Widget _buildYearList() {
-    return Container(
-      height: 40,
+  /// Creates the row with the day of the [selectedDate.month]. If the
+  /// [selectedDate.year] && [selectedDate.month] is the [widget.firstDate] or [widget.lastDate]
+  /// the days show will be the available
+  Widget _buildDayList() {
+    return SizedBox(
+      key: Key('ScrollableDayList'),
+      height: 75,
       child: ScrollablePositionedList.builder(
-        initialScrollIndex: _yearSelectedIndex!,
+        itemScrollController: _controllerDay,
+        initialScrollIndex: _daySelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
-        itemScrollController: _controllerYear,
-        padding: EdgeInsets.only(left: widget.leftMargin),
         scrollDirection: Axis.horizontal,
-        itemCount: _years.length,
+        itemCount: _days.length,
+        padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
         itemBuilder: (BuildContext context, int index) {
-          final currentDate = _years[index];
-          final yearName = DateFormat.y(_locale).format(currentDate);
-
-          return Padding(
-            padding: const EdgeInsets.only(right: 12.0, left: 4.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                YearItem(
-                  isSelected: _yearSelectedIndex == index,
-                  name: yearName,
-                  onTap: () => _goToYear(index),
-                  color: widget.monthColor,
-                  small: false,
-                ),
-                if (index == _years.length - 1)
-                  SizedBox(
+          final currentDay = _days[index];
+          final shortName =
+              DateFormat.E(_locale).format(currentDay).capitalize();
+          return Row(
+            children: <Widget>[
+              DayItem(
+                isSelected: _isSelectedDay(index),
+                dayNumber: currentDay.day,
+                shortName: shortName.length > 3
+                    ? shortName.substring(0, 3)
+                    : shortName,
+                onTap: () => _onSelectDay(index),
+                available: widget.selectableDayPredicate == null
+                    ? true
+                    : widget.selectableDayPredicate!(currentDay),
+                dayColor: widget.dayColor,
+                activeDayColor: widget.activeDayColor,
+                activeDayBackgroundColor: widget.activeBackgroundDayColor,
+                dotsColor: widget.dotsColor,
+                dayNameColor: widget.dayNameColor,
+              ),
+              if (index == _days.length - 1)
+                // Last element to take space to do scroll to left side
+                SizedBox(
                     width: MediaQuery.of(context).size.width -
                         widget.leftMargin -
-                        (yearName.length * 10),
-                  )
-              ],
-            ),
+                        65)
+            ],
           );
         },
       ),
     );
   }
-
-  /// It will populate the [_days] list with all the allowed days. Adding all days of the month
-  /// when the [selectedDate.month] is not the first or the last in [widget.firstDate] or [widget.lastDate].
-  /// In that case it will only show the allowed days from and up to the specified in [widget.firstDate]
-  /// and [widget.lastDate]
-  _generateDays(DateTime? selectedDate) {
-    _days.clear();
-    for (var i = 1; i <= 31; i++) {
-      final day = DateTime(selectedDate!.year, selectedDate.month, i);
-      if (day.difference(widget.firstDate).inDays < 0) continue;
-      if (day.month != selectedDate.month || day.isAfter(widget.lastDate))
-        break;
-      _days.add(day);
-    }
-  }
-
-  /// It will populate the [_months] list. If [widget.showYears] is true, it will add from January
-  /// to December, unless the selected year is the [widget.firstDate.year] or the [widget.lastDate.year].
-  /// In that case it will only from and up to the allowed months in [widget.firstDate] and [widget.lastDate].
-  /// By default, when [widget.showYears] is false, it will add all months from [widget.firstDate] to
-  /// [widget.lastDate] and all in between
-  _generateMonths(DateTime? selectedDate) {
-    _months.clear();
-    if (widget.showYears) {
-      int month = selectedDate!.year == widget.firstDate.year
-          ? widget.firstDate.month
-          : 1;
-      DateTime date = DateTime(selectedDate.year, month);
-      while (date.isBefore(DateTime(selectedDate.year + 1)) &&
-          date.isBefore(widget.lastDate)) {
-        _months.add(date);
-        date = DateTime(date.year, date.month + 1);
-      }
-    } else {
-      DateTime date = DateTime(widget.firstDate.year, widget.firstDate.month);
-      while (date.isBefore(widget.lastDate)) {
-        _months.add(date);
-        date = DateTime(date.year, date.month + 1);
-      }
-    }
-  }
-
-  /// It will populate the [_years] list with the years between firstDate and lastDate
-  _generateYears() {
-    _years.clear();
-    DateTime date = widget.firstDate;
-    while (date.isBefore(widget.lastDate)) {
-      _years.add(date);
-      date = DateTime(date.year + 1);
-    }
-  }
-
-  /// It will reset the calendar to the initial date
-  _updateCalendar(DateTime date) {
-    if (widget.showYears) {
-      _generateMonths(date);
-    }
-    if (_isComeBackPreviousDate(date)) {
-      _monthSelectedIndex = _getIndexOfSelectedMonth();
-    }
-    Future.delayed(const Duration(milliseconds: 50))
-        .then((_) => _moveToMonthIndex(_monthSelectedIndex ?? 0));
-    _generateDays(date);
-    _daySelectedIndex =
-        _isDayAlreadySelected(date) ? getIndexOfSelectedDay() : null;
-
-    setState(() {});
-    Future.delayed(const Duration(milliseconds: 50))
-        .then((_) => _moveToDayIndex(_daySelectedIndex ?? 0));
-  }
-
-  _goToYear(int index) {
-    _moveToYearIndex(index);
-    _yearSelectedIndex = index;
-    _monthSelectedIndex = null;
-    _daySelectedIndex = null;
-    final date = _years[index];
-    _updateCalendar(date.year == _selectedDate!.year ? _selectedDate! : date);
-  }
-
-  void _moveToYearIndex(int index) {
-    if (_controllerYear.isAttached) {
-      _controllerYear.scrollTo(
-        index: index,
-        alignment: _scrollAlignment,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeIn,
-      );
-    }
-  }
-
-  _goToMonth(int index) {
-    _monthSelectedIndex = index;
-    _daySelectedIndex = null;
-    _updateCalendar(_months[index]);
-  }
-
-  void _moveToMonthIndex(int index) {
-    if (_controllerMonth.isAttached) {
-      _controllerMonth.scrollTo(
-        index: index,
-        alignment: _scrollAlignment,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeIn,
-      );
-    }
-  }
-
-  _goToDay(int index) {
-    _daySelectedIndex = index;
-    _selectedDate = _days[index];
-    widget.onDateSelected(_selectedDate);
-  }
-
-  void _moveToDayIndex(int index) {
-    if (_controllerDay.isAttached) {
-      _controllerDay.scrollTo(
-        index: index,
-        alignment: _scrollAlignment,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeIn,
-      );
-    }
-  }
-
-  selectedYear() {
-    _yearSelectedIndex = _years.indexOf(
-        _years.firstWhere((yearDate) => yearDate.year == _selectedDate!.year));
-  }
-
-  selectedMonth() {
-    if (widget.showYears)
-      _monthSelectedIndex = _months.indexOf(_months
-          .firstWhere((monthDate) => monthDate.month == _selectedDate!.month));
-    else
-      _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
-          monthDate.year == _selectedDate!.year &&
-          monthDate.month == _selectedDate!.month));
-  }
-
-  selectedDay() {
-    _daySelectedIndex = _days.indexOf(
-        _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day));
-  }
-
-  /// Initializes the calendar. It will be executed every time a new date is selected
-  _initCalendar() {
-    _locale = widget.locale ?? Localizations.localeOf(context).languageCode;
-    initializeDateFormatting(_locale);
-    _selectedDate = widget.initialDate;
-    if (widget.showYears) {
-      _generateYears();
-      selectedYear();
-    }
-    _generateMonths(_selectedDate);
-    selectedMonth();
-    _generateDays(_selectedDate);
-    selectedDay();
-  }
-
-  bool _isComeBackPreviousDate(DateTime date) =>
-      _selectedDate!.year == date.year &&
-      _monthSelectedIndex == null &&
-      _daySelectedIndex == null;
-
-  int _getIndexOfSelectedMonth() => _months.indexOf(
-      _months.firstWhere((date) => date.month == _selectedDate!.month));
-
-  int getIndexOfSelectedDay() => _days.indexOf(
-        _days.firstWhere((dayDate) => dayDate.day == _selectedDate!.day),
-      );
-
-  bool _isDayAlreadySelected(DateTime date) =>
-      _daySelectedIndex == null &&
-      date.month == _selectedDate!.month &&
-      date.year == _selectedDate!.year;
 }
