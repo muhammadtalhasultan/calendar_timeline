@@ -398,6 +398,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                   onTap: () => _onSelectMonth(index),
                   color: widget.monthColor,
                   shrink: widget.shrink,
+                  activeColor: widget.activeBackgroundDayColor,
                 ),
                 if (index == _months.length - 1)
                   // Last element to take space to do scroll to left side
