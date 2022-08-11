@@ -12,8 +12,9 @@ class DayItem extends StatelessWidget {
   final bool available;
   final Color? dotsColor;
   final Color? dayNameColor;
+  final bool shrink;
 
-  const DayItem({
+  DayItem({
     Key? key,
     required this.dayNumber,
     required this.shortName,
@@ -25,10 +26,9 @@ class DayItem extends StatelessWidget {
     this.available = true,
     this.dotsColor,
     this.dayNameColor,
+    this.shrink = false,
   }) : super(key: key);
 
-  final double height = 70.0;
-  final double width = 60.0;
 
   _buildDay(BuildContext context) {
     final textStyle = TextStyle(
@@ -36,11 +36,11 @@ class DayItem extends StatelessWidget {
         ? dayColor ?? Theme.of(context).colorScheme.secondary
         : dayColor?.withOpacity(0.5) ??
         Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-      fontSize: 32,
+      fontSize: shrink ? 14 : 32,
       fontWeight: FontWeight.normal);
     final selectedStyle = TextStyle(
       color: activeDayColor ?? Colors.white,
-      fontSize: 32,
+      fontSize: shrink ? 14 : 32,
       fontWeight: FontWeight.bold,
       height: 0.8,
     );
@@ -55,16 +55,16 @@ class DayItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         )
           : BoxDecoration(color: Colors.transparent),
-        height: height,
-        width: width,
+        height: shrink ? 40 : 70,
+        width: shrink ? 33 : 60,
         child: Column(
           children: <Widget>[
             if (isSelected) ...[
-              SizedBox(height: 7),
-              _buildDots(),
-              SizedBox(height: 12),
+              SizedBox(height: shrink ? 6 : 7),
+              if(! shrink) _buildDots(),
+              SizedBox(height: shrink ? 9 : 12),
             ] else
-              SizedBox(height: 14),
+              SizedBox(height:shrink ? 10 : 14),
             Text(
               dayNumber.toString(),
               style: isSelected ? selectedStyle : textStyle,
@@ -75,7 +75,7 @@ class DayItem extends StatelessWidget {
                 style: TextStyle(
                   color: dayNameColor ?? activeDayColor ?? Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: shrink ? 9 :  14,
                 ),
               ),
           ],
