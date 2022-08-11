@@ -27,6 +27,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color? monthColor;
   final Color? dotsColor;
   final Color? dayNameColor;
+  final bool shrink;
   final String? locale;
 
   /// If true, it will show a separate row for the years.
@@ -47,6 +48,7 @@ class CalendarTimeline extends StatefulWidget {
     this.monthColor,
     this.dotsColor,
     this.dayNameColor,
+    this.shrink = false,
     this.locale,
     this.showYears = false,
   })  : assert(
@@ -337,6 +339,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                   onTap: () => _onSelectYear(index),
                   color: widget.monthColor,
                   small: false,
+                  shrink: widget.shrink,
                 ),
                 if (index == _years.length - 1)
                   // Last element to take space to do scroll to left side
@@ -358,7 +361,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   /// months in the calendar and the small version of [YearItem] for each year in between
   Widget _buildMonthList() {
     return Container(
-      height: 40,
+      height: 30,
       child: ScrollablePositionedList.builder(
         initialScrollIndex: _monthSelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
@@ -386,6 +389,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                       name: DateFormat.y(_locale).format(currentDate),
                       color: widget.monthColor,
                       onTap: () {},
+                      shrink: widget.shrink,
                     ),
                   ),
                 MonthItem(
@@ -393,6 +397,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                   name: monthName,
                   onTap: () => _onSelectMonth(index),
                   color: widget.monthColor,
+                  shrink: widget.shrink,
                 ),
                 if (index == _months.length - 1)
                   // Last element to take space to do scroll to left side
@@ -415,14 +420,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   Widget _buildDayList() {
     return SizedBox(
       key: Key('ScrollableDayList'),
-      height: 75,
+      height: 40,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex ?? 0,
         initialAlignment: _scrollAlignment,
         scrollDirection: Axis.horizontal,
         itemCount: _days.length,
-        padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
+        padding: EdgeInsets.only(left: widget.leftMargin, right: 6),
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
           final shortName =
@@ -444,6 +449,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 activeDayBackgroundColor: widget.activeBackgroundDayColor,
                 dotsColor: widget.dotsColor,
                 dayNameColor: widget.dayNameColor,
+                shrink: widget.shrink,
               ),
               if (index == _days.length - 1)
                 // Last element to take space to do scroll to left side
