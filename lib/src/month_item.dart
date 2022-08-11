@@ -6,6 +6,7 @@ class MonthItem extends StatelessWidget {
   final Function onTap;
   final bool isSelected;
   final Color? color;
+  final Color? activeColor;
   final bool shrink;
 
   MonthItem({
@@ -13,6 +14,7 @@ class MonthItem extends StatelessWidget {
     required this.onTap,
     this.isSelected = false,
     this.color,
+    this.activeColor,
     required this.shrink
   });
 
@@ -24,8 +26,8 @@ class MonthItem extends StatelessWidget {
         this.name.toUpperCase(),
         style: TextStyle(
           fontSize: shrink ? 10 : 14,
-          color: color ?? Colors.black87,
-          fontWeight: this.isSelected ? FontWeight.bold : FontWeight.w300,
+          color: this.isSelected ? activeColor ?? Color(0xFF002265) : color ?? Colors.black87,
+          fontWeight: this.isSelected ? FontWeight.bold : FontWeight.normal,
         ),
       ),
     );
