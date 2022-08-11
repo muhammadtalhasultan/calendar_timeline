@@ -9,13 +9,16 @@ class YearItem extends StatelessWidget {
   final bool isSelected;
   final Color? color;
   final bool small;
+  final bool shrink;
+
 
   YearItem({
     required this.name,
     required this.onTap,
     this.isSelected = false,
     this.small = true,
-    this.color
+    this.color,
+    required this.shrink,
   });
 
   @override
@@ -34,7 +37,7 @@ class YearItem extends StatelessWidget {
           child: Text(
             name.toUpperCase(),
             style: TextStyle(
-              fontSize: small ? 12 : 20,
+              fontSize: shrink ? 9 : small ? 12 : 20,
               color: color ?? Colors.black87,
               fontWeight: FontWeight.bold,
             ),
