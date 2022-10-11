@@ -64,7 +64,7 @@ void main() {
             var widget = find.byWidgetPredicate(
               (widget) => ParamFactory.isTextWithFontWeight(
                 widget,
-                FontWeight.w300,
+                FontWeight.normal,
               ),
             );
             expect(widget, findsOneWidget);
