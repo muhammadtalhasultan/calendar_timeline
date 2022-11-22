@@ -29,6 +29,9 @@ class CalendarTimeline extends StatefulWidget {
   final Color? dayNameColor;
   final bool shrink;
   final String? locale;
+  final bool showNameOnAllDays;
+  final bool Function(int dayNumber)? showBadge;
+  final String Function(int dayNumber)? badgeText;
 
   /// If true, it will show a separate row for the years.
   /// It defaults to false
@@ -51,6 +54,9 @@ class CalendarTimeline extends StatefulWidget {
     this.shrink = false,
     this.locale,
     this.showYears = false,
+    this.showNameOnAllDays = false,
+    this.showBadge,
+    this.badgeText,
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
@@ -279,7 +285,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     widget.onDateSelected(_selectedDate);
   }
 
-  bool _isSelectedDay(int index) => _monthSelectedIndex != null &&
+  bool _isSelectedDay(int index) =>
+      _monthSelectedIndex != null &&
       (index == _daySelectedIndex || index == _indexOfDay(_selectedDate));
 
   int _indexOfDay(DateTime date) {
@@ -421,7 +428,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   Widget _buildDayList() {
     return SizedBox(
       key: Key('ScrollableDayList'),
-      height: 40,
+      height: 75,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex ?? 0,
@@ -451,6 +458,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 dotsColor: widget.dotsColor,
                 dayNameColor: widget.dayNameColor,
                 shrink: widget.shrink,
+                showNameOnAllDays: widget.showNameOnAllDays,
+                showBadge: widget.showBadge,
+                badgeText: widget.badgeText,
               ),
               if (index == _days.length - 1)
                 // Last element to take space to do scroll to left side
