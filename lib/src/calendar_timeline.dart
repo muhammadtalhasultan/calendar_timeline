@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -30,34 +31,36 @@ class CalendarTimeline extends StatefulWidget {
   final bool shrink;
   final String? locale;
   final bool showNameOnAllDays;
-  final bool Function(int dayNumber)? showBadge;
-  final String Function(int dayNumber)? badgeText;
+  final Widget? Function(int dayNumber)? badgeWidget;
+  final Color? badgeColor;
+  final BadgePosition? badgePosition;
 
   /// If true, it will show a separate row for the years.
   /// It defaults to false
   final bool showYears;
 
-  CalendarTimeline({
-    Key? key,
-    required this.initialDate,
-    required this.firstDate,
-    required this.lastDate,
-    required this.onDateSelected,
-    this.selectableDayPredicate,
-    this.leftMargin = 0,
-    this.dayColor,
-    this.activeDayColor,
-    this.activeBackgroundDayColor,
-    this.monthColor,
-    this.dotsColor,
-    this.dayNameColor,
-    this.shrink = false,
-    this.locale,
-    this.showYears = false,
-    this.showNameOnAllDays = false,
-    this.showBadge,
-    this.badgeText,
-  })  : assert(
+  CalendarTimeline(
+      {Key? key,
+      required this.initialDate,
+      required this.firstDate,
+      required this.lastDate,
+      required this.onDateSelected,
+      this.selectableDayPredicate,
+      this.leftMargin = 0,
+      this.dayColor,
+      this.activeDayColor,
+      this.activeBackgroundDayColor,
+      this.monthColor,
+      this.dotsColor,
+      this.dayNameColor,
+      this.shrink = false,
+      this.locale,
+      this.showYears = false,
+      this.showNameOnAllDays = false,
+      this.badgeWidget,
+      this.badgeColor,
+      this.badgePosition})
+      : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
         ),
@@ -459,8 +462,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 dayNameColor: widget.dayNameColor,
                 shrink: widget.shrink,
                 showNameOnAllDays: widget.showNameOnAllDays,
-                showBadge: widget.showBadge,
-                badgeText: widget.badgeText,
+                badgeWidget: widget.badgeWidget,
+                badgeColor: widget.badgeColor,
+                badgePosition: widget.badgePosition,
               ),
               if (index == _days.length - 1)
                 // Last element to take space to do scroll to left side

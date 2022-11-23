@@ -15,8 +15,9 @@ class DayItem extends StatelessWidget {
   final Color? dayNameColor;
   final bool shrink;
   final bool showNameOnAllDays;
-  final bool Function(int dayNumber)? showBadge;
-  final String Function(int dayNumber)? badgeText;
+  final Widget? Function(int dayNumber)? badgeWidget;
+  final Color? badgeColor;
+  final BadgePosition? badgePosition;
 
   DayItem(
       {Key? key,
@@ -32,8 +33,9 @@ class DayItem extends StatelessWidget {
       this.dayNameColor,
       this.shrink = false,
       this.showNameOnAllDays = false,
-      this.showBadge,
-      this.badgeText})
+      this.badgeWidget,
+      this.badgeColor,
+      this.badgePosition})
       : super(key: key);
 
   _buildDay(BuildContext context) {
@@ -62,18 +64,15 @@ class DayItem extends StatelessWidget {
       height: 0.8,
     );
 
+    Widget? _badgeWidget = badgeWidget?.call(dayNumber);
+
     return GestureDetector(
       onTap: available ? onTap as void Function()? : null,
       child: Badge(
-        showBadge: !isSelected && (showBadge?.call(dayNumber) ?? false),
-        badgeContent: badgeText != null
-            ? Text(
-                badgeText?.call(dayNumber) ?? '',
-                style: const TextStyle(color: Colors.white),
-              )
-            : null,
-        position: BadgePosition.topEnd(top: -4, end: 1),
-        badgeColor: Colors.red,
+        showBadge: !isSelected && _badgeWidget != null,
+        position: badgePosition ?? BadgePosition.topEnd(top: -4, end: 1),
+        badgeContent: _badgeWidget,
+        badgeColor: badgeColor ?? Colors.red,
         child: Container(
           decoration: isSelected
               ? BoxDecoration(
