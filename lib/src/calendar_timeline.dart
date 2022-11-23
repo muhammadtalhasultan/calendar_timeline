@@ -12,6 +12,7 @@ import 'year_item.dart';
 typedef OnDateSelected = void Function(DateTime);
 typedef OnMonthSelected = void Function(DateTime);
 typedef OnYearSelected = void Function(DateTime);
+typedef BadgeFunction = Widget? Function(int dayNumber);
 
 /// Creates a minimal, small profile calendar to select specific dates.
 /// [initialDate] must not be [null], the same or after [firstDate] and
@@ -35,7 +36,7 @@ class CalendarTimeline extends StatefulWidget {
   final bool shrink;
   final String? locale;
   final bool showNameOnAllDays;
-  final Widget? Function(int dayNumber)? badgeWidget;
+  final BadgeFunction? badgeWidget;
   final Color? badgeColor;
   final BadgePosition? badgePosition;
 

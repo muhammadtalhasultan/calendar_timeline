@@ -24,7 +24,13 @@ You can use this package when you need to add a date picker that takes up little
 | activeBackgroundDayColor | Color                  | Color for selected day background                           |
 | dotColor                 | Color                  | Color for top dots in select day                            |
 | locale                   | String                 | Locale string to get formatted date                         |
-| showYears                | bool                   | Indicates if it show year selector                           |
+| showYears                | bool                   | Indicates if it show year selector                          |
+| showNameOnAllDays        | bool                   | Indicates if it show friendly names on all days             |
+| badgeWidget              | BadgeFunction?         | An optional function for handling badge over widget         |
+| badgeColor               | Color                  | Badge color (default RED)                                   |
+| bagdePosition            | BadgePosition          | Badge position (default upper right)                        |
+
+
 
 
 ## Use example
