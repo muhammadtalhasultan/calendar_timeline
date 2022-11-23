@@ -70,7 +70,7 @@ class DayItem extends StatelessWidget {
       onTap: available ? onTap as void Function()? : null,
       child: Badge(
         showBadge: !isSelected && _badgeWidget != null,
-        position: badgePosition ?? BadgePosition.topEnd(top: -4, end: 1),
+        position: badgePosition ?? BadgePosition.topEnd(top: -2, end: 1),
         badgeContent: _badgeWidget,
         badgeColor: badgeColor ?? Colors.red,
         child: Container(

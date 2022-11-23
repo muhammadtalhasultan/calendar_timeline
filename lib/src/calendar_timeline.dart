@@ -10,6 +10,8 @@ import 'util/utils.dart';
 import 'year_item.dart';
 
 typedef OnDateSelected = void Function(DateTime);
+typedef OnMonthSelected = void Function(DateTime);
+typedef OnYearSelected = void Function(DateTime);
 
 /// Creates a minimal, small profile calendar to select specific dates.
 /// [initialDate] must not be [null], the same or after [firstDate] and
@@ -21,6 +23,8 @@ class CalendarTimeline extends StatefulWidget {
   final DateTime lastDate;
   final SelectableDayPredicate? selectableDayPredicate;
   final OnDateSelected onDateSelected;
+  final OnMonthSelected? onMonthSelected;
+  final OnYearSelected? onYearSelected;
   final double leftMargin;
   final Color? dayColor;
   final Color? activeDayColor;
@@ -45,6 +49,8 @@ class CalendarTimeline extends StatefulWidget {
       required this.firstDate,
       required this.lastDate,
       required this.onDateSelected,
+      this.onMonthSelected,
+      this.onYearSelected,
       this.selectableDayPredicate,
       this.leftMargin = 0,
       this.dayColor,
@@ -260,6 +266,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     }
     _generateDays(date);
     _moveToDayIndex(0);
+    widget.onYearSelected?.call(date);
     setState(() {});
   }
 
@@ -274,6 +281,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     // Regenerate days
     _generateDays(_months[index]);
     _moveToDayIndex(0);
+    widget.onMonthSelected?.call(_months[index]);
     setState(() {});
   }
 
