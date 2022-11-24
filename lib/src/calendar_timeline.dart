@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,9 @@ import 'util/utils.dart';
 import 'year_item.dart';
 
 typedef OnDateSelected = void Function(DateTime);
+typedef OnMonthSelected = void Function(DateTime);
+typedef OnYearSelected = void Function(DateTime);
+typedef BadgeFunction = Widget? Function(int dayNumber);
 
 /// Creates a minimal, small profile calendar to select specific dates.
 /// [initialDate] must not be [null], the same or after [firstDate] and
@@ -20,6 +24,8 @@ class CalendarTimeline extends StatefulWidget {
   final DateTime lastDate;
   final SelectableDayPredicate? selectableDayPredicate;
   final OnDateSelected onDateSelected;
+  final OnMonthSelected? onMonthSelected;
+  final OnYearSelected? onYearSelected;
   final double leftMargin;
   final Color? dayColor;
   final Color? activeDayColor;
@@ -29,29 +35,39 @@ class CalendarTimeline extends StatefulWidget {
   final Color? dayNameColor;
   final bool shrink;
   final String? locale;
+  final bool showNameOnAllDays;
+  final BadgeFunction? badgeWidget;
+  final Color? badgeColor;
+  final BadgePosition? badgePosition;
 
   /// If true, it will show a separate row for the years.
   /// It defaults to false
   final bool showYears;
 
-  CalendarTimeline({
-    Key? key,
-    required this.initialDate,
-    required this.firstDate,
-    required this.lastDate,
-    required this.onDateSelected,
-    this.selectableDayPredicate,
-    this.leftMargin = 0,
-    this.dayColor,
-    this.activeDayColor,
-    this.activeBackgroundDayColor,
-    this.monthColor,
-    this.dotsColor,
-    this.dayNameColor,
-    this.shrink = false,
-    this.locale,
-    this.showYears = false,
-  })  : assert(
+  CalendarTimeline(
+      {Key? key,
+      required this.initialDate,
+      required this.firstDate,
+      required this.lastDate,
+      required this.onDateSelected,
+      this.onMonthSelected,
+      this.onYearSelected,
+      this.selectableDayPredicate,
+      this.leftMargin = 0,
+      this.dayColor,
+      this.activeDayColor,
+      this.activeBackgroundDayColor,
+      this.monthColor,
+      this.dotsColor,
+      this.dayNameColor,
+      this.shrink = false,
+      this.locale,
+      this.showYears = false,
+      this.showNameOnAllDays = false,
+      this.badgeWidget,
+      this.badgeColor,
+      this.badgePosition})
+      : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
         ),
@@ -251,6 +267,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     }
     _generateDays(date);
     _moveToDayIndex(0);
+    widget.onYearSelected?.call(date);
     setState(() {});
   }
 
@@ -265,6 +282,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     // Regenerate days
     _generateDays(_months[index]);
     _moveToDayIndex(0);
+    widget.onMonthSelected?.call(_months[index]);
     setState(() {});
   }
 
@@ -279,7 +297,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     widget.onDateSelected(_selectedDate);
   }
 
-  bool _isSelectedDay(int index) => _monthSelectedIndex != null &&
+  bool _isSelectedDay(int index) =>
+      _monthSelectedIndex != null &&
       (index == _daySelectedIndex || index == _indexOfDay(_selectedDate));
 
   int _indexOfDay(DateTime date) {
@@ -421,7 +440,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   Widget _buildDayList() {
     return SizedBox(
       key: Key('ScrollableDayList'),
-      height: 40,
+      height: 75,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex ?? 0,
@@ -451,6 +470,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 dotsColor: widget.dotsColor,
                 dayNameColor: widget.dayNameColor,
                 shrink: widget.shrink,
+                showNameOnAllDays: widget.showNameOnAllDays,
+                badgeWidget: widget.badgeWidget,
+                badgeColor: widget.badgeColor,
+                badgePosition: widget.badgePosition,
               ),
               if (index == _days.length - 1)
                 // Last element to take space to do scroll to left side

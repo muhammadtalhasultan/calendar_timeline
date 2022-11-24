@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   intl: ^0.17.0
   scrollable_positioned_list: ^0.3.2
+  badges: ^2.0.3
 
 dev_dependencies:
   flutter_test:
