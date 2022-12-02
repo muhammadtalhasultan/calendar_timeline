@@ -18,7 +18,7 @@ class YearItem extends StatelessWidget {
     this.isSelected = false,
     this.small = true,
     this.color,
-    required this.shrink,
+    this.shrink = false,
   });
 
   @override

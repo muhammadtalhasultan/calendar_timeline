@@ -15,7 +15,7 @@ class MonthItem extends StatelessWidget {
     this.isSelected = false,
     this.color,
     this.activeColor,
-    required this.shrink
+    this.shrink = false,
   });
 
   @override
