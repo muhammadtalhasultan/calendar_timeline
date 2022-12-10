@@ -451,9 +451,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                     ? shortName.substring(0, 3)
                     : shortName,
                 onTap: () => _onSelectDay(index),
-                available: widget.selectableDayPredicate == null
-                    ? true
-                    : widget.selectableDayPredicate!(currentDay),
+                available: widget.selectableDayPredicate == null ||
+                    widget.selectableDayPredicate!(currentDay),
                 dayColor: widget.dayColor,
                 activeDayColor: widget.activeDayColor,
                 activeDayBackgroundColor: widget.activeBackgroundDayColor,
