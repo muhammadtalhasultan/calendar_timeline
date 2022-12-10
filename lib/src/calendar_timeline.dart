@@ -108,7 +108,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   /// Initializes the calendar. It will be executed every time a new date is selected
-  _initCalendar() {
+  void _initCalendar() {
     _locale = widget.locale ?? Localizations.localeOf(context).languageCode;
     initializeDateFormatting(_locale);
     _selectedDate = widget.initialDate;
@@ -126,7 +126,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   /// It will populate the [_years] list with the years between firstDate and lastDate
-  _generateYears() {
+  void _generateYears() {
     _years.clear();
     var date = widget.firstDate;
     while (date.isBefore(widget.lastDate)) {
@@ -140,7 +140,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   /// In that case it will only from and up to the allowed months in [widget.firstDate] and [widget.lastDate].
   /// By default, when [widget.showYears] is false, it will add all months from [widget.firstDate] to
   /// [widget.lastDate] and all in between
-  _generateMonths(DateTime? selectedDate) {
+  void _generateMonths(DateTime? selectedDate) {
     _months.clear();
     if (widget.showYears) {
       final month = selectedDate!.year == widget.firstDate.year
@@ -165,7 +165,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   /// when the [selectedDate.month] is not the first or the last in [widget.firstDate] or [widget.lastDate].
   /// In that case it will only show the allowed days from and up to the specified in [widget.firstDate]
   /// and [widget.lastDate]
-  _generateDays(DateTime? selectedDate) {
+  void _generateDays(DateTime? selectedDate) {
     _days.clear();
     for (var i = 1; i <= 31; i++) {
       final day = DateTime(selectedDate!.year, selectedDate.month, i);
@@ -177,13 +177,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     }
   }
 
-  _selectedYearIndex() {
+  void _selectedYearIndex() {
     _yearSelectedIndex = _years.indexOf(
       _years.firstWhere((yearDate) => yearDate.year == _selectedDate.year),
     );
   }
 
-  _selectedMonthIndex() {
+  void _selectedMonthIndex() {
     if (widget.showYears) {
       _monthSelectedIndex = _months.indexOf(
         _months
@@ -200,7 +200,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     }
   }
 
-  _selectedDayIndex() {
+  void _selectedDayIndex() {
     _daySelectedIndex = _days.indexOf(
       _days.firstWhere((dayDate) => dayDate.day == _selectedDate.day),
     );
@@ -242,7 +242,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     }
   }
 
-  _onSelectYear(int index) {
+  void _onSelectYear(int index) {
     // Move to selected year
     _yearSelectedIndex = index;
     _moveToYearIndex(index);
@@ -262,7 +262,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     setState(() {});
   }
 
-  _onSelectMonth(int index) {
+  void _onSelectMonth(int index) {
     // Move to selected month
     _monthSelectedIndex = index;
     _moveToMonthIndex(index);
@@ -276,7 +276,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     setState(() {});
   }
 
-  _onSelectDay(int index) {
+  void _onSelectDay(int index) {
     // Move to selected day
     _daySelectedIndex = index;
     _moveToDayIndex(index);
