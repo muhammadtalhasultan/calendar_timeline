@@ -44,7 +44,7 @@ abstract class ParamFactory {
     if (widget.color != null) {
       return widget.color == color;
     } else if (widget.decoration != null) {
-      return (widget.decoration as BoxDecoration).color == color;
+      return (widget.decoration! as BoxDecoration).color == color;
     } else {
       return false;
     }

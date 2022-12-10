@@ -10,6 +10,7 @@ void main() {
     home: Scaffold(
       body: YearItem(
         name: 'year',
+        // ignore: avoid_print
         onTap: () => print('onTap'),
       ),
     ),
@@ -46,7 +47,7 @@ void main() {
         'Style',
         () {
           testWidgets(
-            'if widget have [isSelected] or [small] to true value, add'
+            'if widget have [isSelected] or [small] to true value, add '
             'a box decoration',
             (WidgetTester tester) async {
               await tester.pumpApp(

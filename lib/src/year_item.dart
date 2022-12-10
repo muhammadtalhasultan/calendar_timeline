@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// years row. In the smaller version the [onTap] property is not available
 class YearItem extends StatelessWidget {
   const YearItem({
-    Key? key, 
+    Key? key,
     required this.name,
     required this.onTap,
     this.isSelected = false,
@@ -24,6 +24,7 @@ class YearItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: small ? null : onTap as void Function()?,
+      // ignore: use_decorated_box
       child: Container(
         decoration: isSelected || small
             ? BoxDecoration(
