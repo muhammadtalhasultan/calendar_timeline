@@ -72,7 +72,7 @@ class CalendarTimeline extends StatefulWidget {
   final bool showYears;
 
   @override
-  _CalendarTimelineState createState() => _CalendarTimelineState();
+  State<CalendarTimeline> createState() => _CalendarTimelineState();
 }
 
 class _CalendarTimelineState extends State<CalendarTimeline> {
