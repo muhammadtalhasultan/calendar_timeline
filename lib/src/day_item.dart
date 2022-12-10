@@ -2,19 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Creates a Widget representing the day.
 class DayItem extends StatelessWidget {
-  final int dayNumber;
-  final String shortName;
-  final bool isSelected;
-  final Function onTap;
-  final Color? dayColor;
-  final Color? activeDayColor;
-  final Color? activeDayBackgroundColor;
-  final bool available;
-  final Color? dotsColor;
-  final Color? dayNameColor;
-  final bool shrink;
-
-  DayItem({
+  const DayItem({
     Key? key,
     required this.dayNumber,
     required this.shortName,
@@ -28,16 +16,27 @@ class DayItem extends StatelessWidget {
     this.dayNameColor,
     this.shrink = false,
   }) : super(key: key);
+  final int dayNumber;
+  final String shortName;
+  final bool isSelected;
+  final Function onTap;
+  final Color? dayColor;
+  final Color? activeDayColor;
+  final Color? activeDayBackgroundColor;
+  final bool available;
+  final Color? dotsColor;
+  final Color? dayNameColor;
+  final bool shrink;
 
-
-  _buildDay(BuildContext context) {
+  GestureDetector _buildDay(BuildContext context) {
     final textStyle = TextStyle(
       color: available
-        ? dayColor ?? Theme.of(context).colorScheme.secondary
-        : dayColor?.withOpacity(0.5) ??
-        Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+          ? dayColor ?? Theme.of(context).colorScheme.secondary
+          : dayColor?.withOpacity(0.5) ??
+              Theme.of(context).colorScheme.secondary.withOpacity(0.5),
       fontSize: shrink ? 14 : 32,
-      fontWeight: FontWeight.normal);
+      fontWeight: FontWeight.normal,
+    );
     final selectedStyle = TextStyle(
       color: activeDayColor ?? Colors.white,
       fontSize: shrink ? 14 : 32,
@@ -49,22 +48,22 @@ class DayItem extends StatelessWidget {
       onTap: available ? onTap as void Function()? : null,
       child: Container(
         decoration: isSelected
-          ? BoxDecoration(
-          color:
-          activeDayBackgroundColor ?? Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(12.0),
-        )
-          : BoxDecoration(color: Colors.transparent),
+            ? BoxDecoration(
+                color: activeDayBackgroundColor ??
+                    Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(12),
+              )
+            : const BoxDecoration(color: Colors.transparent),
         height: shrink ? 40 : 70,
         width: shrink ? 33 : 60,
         child: Column(
           children: <Widget>[
             if (isSelected) ...[
               SizedBox(height: shrink ? 6 : 7),
-              if(! shrink) _buildDots(),
+              if (!shrink) _buildDots(),
               SizedBox(height: shrink ? 9 : 12),
             ] else
-              SizedBox(height:shrink ? 10 : 14),
+              SizedBox(height: shrink ? 10 : 14),
             Text(
               dayNumber.toString(),
               style: isSelected ? selectedStyle : textStyle,
@@ -75,7 +74,7 @@ class DayItem extends StatelessWidget {
                 style: TextStyle(
                   color: dayNameColor ?? activeDayColor ?? Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: shrink ? 9 :  14,
+                  fontSize: shrink ? 9 : 14,
                 ),
               ),
           ],
@@ -88,8 +87,8 @@ class DayItem extends StatelessWidget {
     final dot = Container(
       height: 5,
       width: 5,
-      decoration: new BoxDecoration(
-        color: this.dotsColor ?? this.activeDayColor ?? Colors.white,
+      decoration: BoxDecoration(
+        color: dotsColor ?? activeDayColor ?? Colors.white,
         shape: BoxShape.circle,
       ),
     );

@@ -1,6 +1,6 @@
+import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:calendar_timeline/calendar_timeline.dart';
 
 import '../helper/helper.dart';
 import '../test_utils/test_utils.dart';
@@ -56,7 +56,6 @@ void main() {
             await tester.pumpApp(
               MonthItem(
                 name: ParamFactory.monthName,
-                isSelected: ParamFactory.isNotSelected, // default value
                 onTap: () {},
               ),
             );
@@ -94,7 +93,7 @@ void main() {
             '[onTap] callback when is tapped',
             (WidgetTester tester) async {
               var functionCalls = 0;
-              final onTap = () => functionCalls++;
+              int onTap() => functionCalls++;
 
               await tester.pumpApp(
                 MonthItem(

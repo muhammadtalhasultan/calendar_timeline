@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import '../test_utils/test_utils.dart';
 import '../helper/helper.dart';
+import '../test_utils/test_utils.dart';
 
 void main() {
   setUpAll(() {
@@ -31,7 +31,7 @@ void main() {
                     .difference(ParamFactory.firstDate)
                     .inDays -
                 1;
-            final foundDays = find.textContaining(RegExp(r'[0-9]'));
+            final foundDays = find.textContaining(RegExp('[0-9]'));
             expect(foundDays, findsNWidgets(dateDaysDifference));
           });
           testWidgets(
@@ -59,7 +59,6 @@ void main() {
                   firstDate: ParamFactory.firstDate,
                   lastDate: ParamFactory.lastDate,
                   initialDate: ParamFactory.initialDate,
-                  showYears: ParamFactory.isNotShowed,
                   onDateSelected: (dateTime) {},
                 ),
               );
@@ -144,7 +143,7 @@ void main() {
             'when tap a day or month call [onDateSelected]',
             (WidgetTester tester) async {
               var methodCalls = 0;
-              final onTap = () => methodCalls++;
+              int onTap() => methodCalls++;
 
               await tester.pumpApp(
                 CalendarTimeline(
