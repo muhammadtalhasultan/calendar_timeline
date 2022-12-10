@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 /// years row. In the smaller version the [onTap] property is not available
 class YearItem extends StatelessWidget {
   const YearItem({
+    Key? key, 
     required this.name,
     required this.onTap,
     this.isSelected = false,
     this.small = true,
     this.color,
     this.shrink = false,
-  });
+  }) : super(key: key);
   final String name;
   final Function onTap;
   final bool isSelected;

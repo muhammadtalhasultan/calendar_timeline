@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 /// Creates a Widget to represent the months.
 class MonthItem extends StatelessWidget {
   const MonthItem({
+    Key? key, 
     required this.name,
     required this.onTap,
     this.isSelected = false,
     this.color,
     this.activeColor,
     this.shrink = false,
-  });
+  }) : super(key: key);
   final String name;
   final Function onTap;
   final bool isSelected;
