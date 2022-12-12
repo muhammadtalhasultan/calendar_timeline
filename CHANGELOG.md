@@ -1,3 +1,9 @@
+## 1.1.0 - 12/12/2022
+
+* Integrate a CI system
+* Add 'shrink' param to save more space
+* Thanks @pablojimpas and @HafzalBZ
+
 ## 1.0.5 - 05/07/2022
 
 * Improve behavior and fixed errors
