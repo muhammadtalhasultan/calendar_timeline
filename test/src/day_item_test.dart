@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../helper/helper.dart';
 import '../test_utils/test_utils.dart';

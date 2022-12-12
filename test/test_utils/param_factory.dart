@@ -9,10 +9,10 @@ abstract class ParamFactory {
   static const double normalTextSize = 20;
 
   // String
-  static const String capitalizedString = "String";
-  static const String dayName = "MON";
-  static const String monthName = "January";
-  static const String unCapitalizedString = "string";
+  static const String capitalizedString = 'String';
+  static const String dayName = 'MON';
+  static const String monthName = 'January';
+  static const String unCapitalizedString = 'string';
   static const String yearName = '2020';
 
   // Color
@@ -33,10 +33,9 @@ abstract class ParamFactory {
   static const FontWeight light = FontWeight.w300;
 
   // DateTime
-  static final DateTime firstDate =  DateTime(2020);
-  static final DateTime lastDate =  DateTime(2020, 1, 5);
-  static final DateTime initialDate =  DateTime(2020, 1, 3);
-
+  static final DateTime firstDate = DateTime(2020);
+  static final DateTime lastDate = DateTime(2020, 1, 5);
+  static final DateTime initialDate = DateTime(2020, 1, 3);
 
   // Functions
   static bool isContainerWithColor(Widget widget, Color color) {
@@ -45,7 +44,7 @@ abstract class ParamFactory {
     if (widget.color != null) {
       return widget.color == color;
     } else if (widget.decoration != null) {
-      return (widget.decoration as BoxDecoration).color == color;
+      return (widget.decoration! as BoxDecoration).color == color;
     } else {
       return false;
     }

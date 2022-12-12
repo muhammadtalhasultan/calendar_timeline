@@ -1,17 +1,19 @@
+import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:calendar_timeline/calendar_timeline.dart';
 
 import '../helper/helper.dart';
 import '../test_utils/test_utils.dart';
 
 void main() {
-  MaterialApp app = MaterialApp(
+  final app = MaterialApp(
     home: Scaffold(
-        body: YearItem(
-      name: 'year',
-      onTap: () => print('onTap'),
-    )),
+      body: YearItem(
+        name: 'year',
+        // ignore: avoid_print
+        onTap: () => print('onTap'),
+      ),
+    ),
   );
   testWidgets('YearItem has name text in uppercase',
       (WidgetTester tester) async {
@@ -45,19 +47,18 @@ void main() {
         'Style',
         () {
           testWidgets(
-            'if widget have [isSelected] or [small] to true value, add'
+            'if widget have [isSelected] or [small] to true value, add '
             'a box decoration',
             (WidgetTester tester) async {
               await tester.pumpApp(
                 YearItem(
                   name: ParamFactory.yearName,
-                  small: ParamFactory.isSmall,
                   onTap: () {},
                 ),
               );
 
               final decoration = BoxDecoration(
-                border: Border.all(color: Colors.black87, width: 1),
+                border: Border.all(color: Colors.black87),
                 borderRadius: BorderRadius.circular(4),
               );
               var widget = find.byWidgetPredicate(
@@ -91,7 +92,6 @@ void main() {
               await tester.pumpApp(
                 YearItem(
                   name: ParamFactory.yearName,
-                  small: ParamFactory.isSmall, // default value
                   onTap: () {},
                 ),
               );
@@ -130,7 +130,7 @@ void main() {
             '[onTap] callback when widget is tapped and it is not small',
             (WidgetTester tester) async {
               var functionCalls = 0;
-              final onTap = () => functionCalls++;
+              int onTap() => functionCalls++;
 
               await tester.pumpApp(
                 YearItem(
@@ -148,14 +148,13 @@ void main() {
           );
           testWidgets(
             '[onTap] is not called when widget is tapped and it is small',
-                (WidgetTester tester) async {
+            (WidgetTester tester) async {
               var functionCalls = 0;
-              final onTap = () => functionCalls++;
+              int onTap() => functionCalls++;
 
               await tester.pumpApp(
                 YearItem(
                   name: ParamFactory.yearName,
-                  small: ParamFactory.isSmall,
                   onTap: onTap,
                 ),
               );
