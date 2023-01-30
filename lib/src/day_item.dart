@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
 /// Creates a Widget representing the day.
@@ -17,7 +17,7 @@ class DayItem extends StatelessWidget {
   final bool showNameOnAllDays;
   final Widget? Function(int dayNumber)? badgeWidget;
   final Color? badgeColor;
-  final BadgePosition? badgePosition;
+  final badges.BadgePosition? badgePosition;
 
   DayItem(
       {Key? key,
@@ -68,11 +68,11 @@ class DayItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: available ? onTap as void Function()? : null,
-      child: Badge(
+      child: badges.Badge(
         showBadge: !isSelected && _badgeWidget != null,
-        position: badgePosition ?? BadgePosition.topEnd(top: -2, end: 1),
+        position: badgePosition ?? badges.BadgePosition.topEnd(top: -2, end: 1),
         badgeContent: _badgeWidget,
-        badgeColor: badgeColor ?? Colors.red,
+        badgeStyle: badges.BadgeStyle(badgeColor: badgeColor ?? Colors.red),
         child: Container(
           decoration: isSelected
               ? BoxDecoration(
