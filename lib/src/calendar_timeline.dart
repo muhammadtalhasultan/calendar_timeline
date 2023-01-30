@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +38,7 @@ class CalendarTimeline extends StatefulWidget {
   final bool showNameOnAllDays;
   final BadgeFunction? badgeWidget;
   final Color? badgeColor;
-  final BadgePosition? badgePosition;
+  final badges.BadgePosition? badgePosition;
 
   /// If true, it will show a separate row for the years.
   /// It defaults to false
