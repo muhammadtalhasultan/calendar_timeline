@@ -1,6 +1,6 @@
+import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:calendar_timeline/calendar_timeline.dart';
 
 import '../helper/helper.dart';
 import '../test_utils/test_utils.dart';
@@ -17,6 +17,7 @@ void main() {
             (WidgetTester tester) async {
               await tester.pumpApp(
                 MonthItem(
+                  shrink: false,
                   name: ParamFactory.monthName,
                   onTap: () {},
                 ),
@@ -35,6 +36,7 @@ void main() {
           (WidgetTester tester) async {
             await tester.pumpApp(
               MonthItem(
+                shrink: false,
                 name: ParamFactory.monthName,
                 color: ParamFactory.textColor,
                 onTap: () {},
@@ -55,6 +57,7 @@ void main() {
           (WidgetTester tester) async {
             await tester.pumpApp(
               MonthItem(
+                shrink: false,
                 name: ParamFactory.monthName,
                 isSelected: ParamFactory.isNotSelected, // default value
                 onTap: () {},
@@ -71,6 +74,7 @@ void main() {
 
             await tester.pumpApp(
               MonthItem(
+                shrink: false,
                 name: ParamFactory.monthName,
                 isSelected: ParamFactory.isSelected,
                 onTap: () {},
@@ -98,6 +102,7 @@ void main() {
 
               await tester.pumpApp(
                 MonthItem(
+                  shrink: false,
                   name: ParamFactory.monthName,
                   isSelected: ParamFactory.isSelected,
                   onTap: onTap,
