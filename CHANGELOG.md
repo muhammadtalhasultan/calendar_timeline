@@ -1,3 +1,7 @@
+## 1.1.1 - 09/02/2023
+
+* Fix overflow error in day widget
+
 ## 1.1.0 - 12/12/2022
 
 * Integrate a CI system
