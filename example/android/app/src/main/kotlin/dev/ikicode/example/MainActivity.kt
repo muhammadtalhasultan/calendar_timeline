@@ -1,4 +1,4 @@
-package es.codigobase.example
+package dev.ikicode.example
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

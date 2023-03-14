@@ -1,3 +1,7 @@
+## 1.1.2 - 14/03/2023
+
+* Minor updates
+
 ## 1.1.1 - 09/02/2023
 
 * Fix overflow error in day widget

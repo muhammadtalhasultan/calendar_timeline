@@ -1,7 +1,7 @@
 name: calendar_timeline
 description: A horizontal date picker that takes up little screen space, so we
   can always have it visible, and that facilitates use with one hand.
-version: 1.1.1
+version: 1.1.2
 homepage: https://github.com/ikicodedev/calendar_timeline
 
 environment:

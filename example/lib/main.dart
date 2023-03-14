@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                 'Calendar Timeline',
                 style: Theme.of(context)
                     .textTheme
-                    .headline6!
+                    .titleLarge!
                     .copyWith(color: Colors.tealAccent[100]),
               ),
             ),
