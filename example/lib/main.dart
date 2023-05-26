@@ -30,6 +30,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late DateTime _selectedDate;
+  late List<DateTime> _eventDates;
 
   @override
   void initState() {
@@ -39,6 +40,12 @@ class _HomePageState extends State<HomePage> {
 
   void _resetSelectedDate() {
     _selectedDate = DateTime.now().add(const Duration(days: 2));
+    _eventDates = [
+      DateTime.now().add(const Duration(days: 2)),
+      DateTime.now().add(const Duration(days: 3)),
+      DateTime.now().add(const Duration(days: 4)),
+      DateTime.now().subtract(const Duration(days: 4)),
+    ];
   }
 
   @override
@@ -64,6 +71,7 @@ class _HomePageState extends State<HomePage> {
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(const Duration(days: 365 * 4)),
+              // eventDates: _eventDates,
               onDateSelected: (date) => setState(() => _selectedDate = date),
               leftMargin: 20,
               monthColor: Colors.white70,
@@ -71,7 +79,7 @@ class _HomePageState extends State<HomePage> {
               dayNameColor: const Color(0xFF333A47),
               activeDayColor: Colors.white,
               activeBackgroundDayColor: Colors.redAccent[100],
-              dotsColor: const Color(0xFF333A47),
+              dotColor: Colors.white,
               selectableDayPredicate: (date) => date.day != 23,
               locale: 'en',
             ),
