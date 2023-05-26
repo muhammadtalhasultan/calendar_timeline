@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(const Duration(days: 365 * 4)),
-              // eventDates: _eventDates,
+              eventDates: _eventDates,
               onDateSelected: (date) => setState(() => _selectedDate = date),
               leftMargin: 20,
               monthColor: Colors.white70,
