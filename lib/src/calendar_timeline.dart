@@ -28,6 +28,14 @@ class CalendarTimeline extends StatefulWidget {
     this.monthColor,
     this.dotsColor,
     this.dayNameColor,
+    this.height = 80,
+    this.width = 60,
+    this.shrinkHeight = 40,
+    this.shrinkWidth = 33,
+    this.fontSize = 32,
+    this.shrinkFontSize = 14,
+    this.dayNameFontSize = 14,
+    this.shrinkDayNameFontSize = 9,
     this.shrink = false,
     this.locale,
     this.showYears = false,
@@ -64,6 +72,14 @@ class CalendarTimeline extends StatefulWidget {
   final Color? monthColor;
   final Color? dotsColor;
   final Color? dayNameColor;
+  final double height;
+  final double width;
+  final double shrinkHeight;
+  final double shrinkWidth;
+  final double fontSize;
+  final double shrinkFontSize;
+  final double dayNameFontSize;
+  final double shrinkDayNameFontSize;
   final bool shrink;
   final String? locale;
 
@@ -430,7 +446,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   Widget _buildDayList() {
     return SizedBox(
       key: const Key('ScrollableDayList'),
-      height: 70,
+      height: widget.height,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex ?? 0,
@@ -458,6 +474,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 activeDayBackgroundColor: widget.activeBackgroundDayColor,
                 dotsColor: widget.dotsColor,
                 dayNameColor: widget.dayNameColor,
+                height: widget.height,
+                width: widget.width,
+                shrinkHeight: widget.shrinkHeight,
+                shrinkWidth: widget.shrinkWidth,
+                fontSize: widget.fontSize,
+                shrinkFontSize: widget.shrinkFontSize,
+                dayNameFontSize: widget.dayNameFontSize,
+                shrinkDayNameFontSize: widget.shrinkDayNameFontSize,
                 shrink: widget.shrink,
               ),
               if (index == _days.length - 1)
