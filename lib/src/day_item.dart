@@ -51,13 +51,13 @@ class DayItem extends StatelessWidget {
           : dayColor?.withOpacity(0.5) ??
               Theme.of(context).colorScheme.secondary.withOpacity(0.5),
       fontSize: shrink ? shrinkFontSize : fontSize,
-      height: 1,
+      height: 0.8,
     );
     final selectedStyle = TextStyle(
       color: activeDayColor ?? Colors.white,
       fontSize: shrink ? shrinkFontSize : fontSize,
       fontWeight: FontWeight.bold,
-      height: 1,
+      height: 0.8,
     );
 
     return GestureDetector(
@@ -92,7 +92,7 @@ class DayItem extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: shrink ? 6 : 7),
+              padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 shortName,
                 style: TextStyle(

@@ -30,7 +30,7 @@ class CalendarTimeline extends StatefulWidget {
     this.dayNameColor,
     this.height = 80,
     this.width = 60,
-    this.shrinkHeight = 40,
+    this.shrinkHeight = 50,
     this.shrinkWidth = 33,
     this.fontSize = 32,
     this.shrinkFontSize = 14,
@@ -446,7 +446,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   Widget _buildDayList() {
     return SizedBox(
       key: const Key('ScrollableDayList'),
-      height: widget.height,
+      height: widget.shrink ? widget.shrinkHeight : widget.height,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex ?? 0,
