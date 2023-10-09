@@ -447,9 +447,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
               DayItem(
                 isSelected: _isSelectedDay(index),
                 dayNumber: currentDay.day,
-                shortName: shortName.length > 3
-                    ? shortName.substring(0, 3)
-                    : shortName,
+                shortName: shortName,
+                    // > 3,
+                    // ? shortName.substring(0, 3)
+                    // : shortName,
                 onTap: () => _onSelectDay(index),
                 available: widget.selectableDayPredicate == null ||
                     widget.selectableDayPredicate!(currentDay),
