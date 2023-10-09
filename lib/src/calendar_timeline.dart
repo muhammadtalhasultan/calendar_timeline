@@ -441,7 +441,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
           final shortName =
-              DateFormat.E("ar").format(currentDay);
+              DateFormat.E(_locale).format(currentDay);
                   //.capitalize();
           return Row(
             children: <Widget>[
