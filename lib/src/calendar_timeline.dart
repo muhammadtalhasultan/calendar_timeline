@@ -441,15 +441,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
           final shortName =
-              DateFormat.E(_locale).format(currentDay).capitalize();
+              DateFormat.EEEE(_locale).format(currentDay);
           return Row(
             children: <Widget>[
               DayItem(
                 isSelected: _isSelectedDay(index),
                 dayNumber: currentDay.day,
-                shortName: shortName.length > 3
-                    ? shortName.substring(0, 3)
-                    : shortName,
+                shortName: shortName,
                 onTap: () => _onSelectDay(index),
                 available: widget.selectableDayPredicate == null ||
                     widget.selectableDayPredicate!(currentDay),
