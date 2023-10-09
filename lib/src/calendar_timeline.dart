@@ -1,6 +1,6 @@
 import 'package:calendar_timeline/src/day_item.dart';
 import 'package:calendar_timeline/src/month_item.dart';
-import 'package:calendar_timeline/src/util/utils.dart';
+// import 'package:calendar_timeline/src/util/utils.dart';
 import 'package:calendar_timeline/src/year_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -441,7 +441,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
           final shortName =
-              DateFormat.E(_locale).format(currentDay).capitalize();
+              DateFormat.E(_locale).format(currentDay);
+                  //.capitalize();
           return Row(
             children: <Widget>[
               DayItem(
