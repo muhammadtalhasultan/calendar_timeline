@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Creates a Widget representing the day.
 class DayItem extends StatelessWidget {
-  const DayItem({
+   DayItem({
     Key? key,
     required this.dayNumber,
     required this.shortName,
@@ -27,6 +27,7 @@ class DayItem extends StatelessWidget {
   final Color? dotsColor;
   final Color? dayNameColor;
   final bool shrink;
+  Size? size;
 
   GestureDetector _buildDay(BuildContext context) {
     final textStyle = TextStyle(
@@ -54,7 +55,7 @@ class DayItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               )
             : const BoxDecoration(color: Colors.transparent),
-        height: 100,
+        height: size!.height*0.10,
         width: 100,
         child: Column(
           children: <Widget>[
@@ -101,6 +102,7 @@ class DayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     size = MediaQuery.of(context).size;
     return _buildDay(context);
   }
 }
