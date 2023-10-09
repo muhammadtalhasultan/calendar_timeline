@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 /// Creates a Widget representing the day.
@@ -35,12 +37,12 @@ class DayItem extends StatelessWidget {
           ? dayColor ?? Theme.of(context).colorScheme.secondary
           : dayColor?.withOpacity(0.5) ??
               Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-      fontSize: shrink ? 14 : 28,
+      fontSize: shrink ? 14 : 24,
       fontWeight: FontWeight.normal,
     );
     final selectedStyle = TextStyle(
       color: activeDayColor ?? Colors.white,
-      fontSize: shrink ? 14 : 28,
+      fontSize: shrink ? 14 : 24,
       fontWeight: FontWeight.bold,
       height: 0.8,
     );
