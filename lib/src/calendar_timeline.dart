@@ -442,7 +442,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
           final currentDay = _days[index];
           final shortName =
               DateFormat.E(_locale).format(currentDay);
-                  //.capitalize();
+              print("short name : $shortName");
           return Row(
             children: <Widget>[
               DayItem(
