@@ -248,8 +248,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _moveToYearIndex(index);
 
     // Reset month and day index
-    _monthSelectedIndex = null;
-    _daySelectedIndex = null;
+    _monthSelectedIndex = 0;
+    _daySelectedIndex = 0;
 
     // Regenerate months and days
     final date = _years[index];
