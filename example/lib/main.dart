@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
               lastDate: DateTime.now().add(const Duration(days: 365 * 4)),
               eventDates: _eventDates,
               onDateSelected: (date) => setState(() => _selectedDate = date),
-              leftMargin: 20,
+              leftMargin: 12,
               monthColor: Colors.white70,
               dayColor: Colors.teal[200],
               dayNameColor: const Color(0xFF333A47),
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(left: 16),
               child: TextButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.teal[200]),
+                  backgroundColor: WidgetStateProperty.all(Colors.teal[200]),
                 ),
                 child: const Text(
                   'RESET',

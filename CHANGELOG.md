@@ -1,3 +1,7 @@
+## 1.1.3 - 14/03/2023
+
+* Minor updates, Flutter packages update
+
 ## 1.1.2 - 14/03/2023
 
 * Minor updates

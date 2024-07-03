@@ -385,7 +385,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                     width: MediaQuery.of(context).size.width -
                         widget.leftMargin -
                         (yearName.length * 10),
-                  )
+                  ),
               ],
             ),
           );
@@ -443,7 +443,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                     width: MediaQuery.of(context).size.width -
                         widget.leftMargin -
                         (monthName.length * 10),
-                  )
+                  ),
               ],
             ),
           );
@@ -503,7 +503,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                   width: MediaQuery.of(context).size.width -
                       widget.leftMargin -
                       65,
-                )
+                ),
             ],
           );
         },
