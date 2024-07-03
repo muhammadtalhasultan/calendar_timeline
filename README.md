@@ -1,6 +1,6 @@
 ![header.jpg](header.jpg)
 
-**Flutter widget form select a date in horizontal timeline with customizable styles.**
+**DISCONTINUED - Flutter widget form select a date in horizontal timeline with customizable styles.**
 
 ## Getting Started
 
