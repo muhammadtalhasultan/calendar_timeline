@@ -15,6 +15,14 @@ class DayItem extends StatelessWidget {
     this.showDot = false,
     this.dotColor,
     this.dayNameColor,
+    required this.height,
+    required this.width,
+    required this.shrinkHeight,
+    required this.shrinkWidth,
+    required this.fontSize,
+    required this.shrinkFontSize,
+    required this.dayNameFontSize,
+    required this.shrinkDayNameFontSize,
     this.shrink = false,
   }) : super(key: key);
   final int dayNumber;
@@ -28,6 +36,14 @@ class DayItem extends StatelessWidget {
   final bool showDot;
   final Color? dotColor;
   final Color? dayNameColor;
+  final double height;
+  final double width;
+  final double shrinkHeight;
+  final double shrinkWidth;
+  final double fontSize;
+  final double shrinkFontSize;
+  final double dayNameFontSize;
+  final double shrinkDayNameFontSize;
   final bool shrink;
 
   GestureDetector _buildDay(BuildContext context) {
@@ -36,12 +52,12 @@ class DayItem extends StatelessWidget {
           ? dayColor ?? Theme.of(context).colorScheme.secondary
           : dayColor?.withOpacity(0.5) ??
               Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-      fontSize: shrink ? 14 : 32,
-      fontWeight: FontWeight.normal,
+      fontSize: shrink ? shrinkFontSize : fontSize,
+      height: 0.8,
     );
     final selectedStyle = TextStyle(
       color: activeDayColor ?? Colors.white,
-      fontSize: shrink ? 14 : 32,
+      fontSize: shrink ? shrinkFontSize : fontSize,
       fontWeight: FontWeight.bold,
       height: 0.8,
     );
@@ -56,9 +72,10 @@ class DayItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               )
             : const BoxDecoration(color: Colors.transparent),
-        height: shrink ? 40 : 70,
-        width: shrink ? 33 : 60,
+        height: shrink ? shrinkHeight : height,
+        width: shrink ? shrinkWidth : width,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             if (showDot) ...[
               SizedBox(height: shrink ? 6 : 7),
@@ -71,14 +88,34 @@ class DayItem extends StatelessWidget {
               style: isSelected ? selectedStyle : textStyle,
             ),
             if (isSelected)
-              Text(
+              Column(
+                children: [
+                  SizedBox(height: shrink ? 6 : 7),
+                  if (!shrink) _buildDots(),
+                  SizedBox(height: shrink ? 6 : 7),
+                ],
+              )
+            else
+              SizedBox(height: shrink ? 12 : 19),
+            Center(
+              child: Text(
+                dayNumber.toString(),
+                style: isSelected ? selectedStyle : textStyle,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
                 shortName,
                 style: TextStyle(
-                  color: dayNameColor ?? activeDayColor ?? Colors.white,
+                  color: isSelected
+                      ? dayNameColor ?? activeDayColor ?? Colors.white
+                      : Colors.transparent,
                   fontWeight: FontWeight.bold,
-                  fontSize: shrink ? 9 : 14,
+                  fontSize: shrink ? shrinkDayNameFontSize : dayNameFontSize,
                 ),
               ),
+            ),
           ],
         ),
       ),

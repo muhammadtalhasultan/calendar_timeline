@@ -28,6 +28,14 @@ class CalendarTimeline extends StatefulWidget {
     this.monthColor,
     this.dotColor,
     this.dayNameColor,
+    this.height = 80,
+    this.width = 60,
+    this.shrinkHeight = 50,
+    this.shrinkWidth = 33,
+    this.fontSize = 32,
+    this.shrinkFontSize = 14,
+    this.dayNameFontSize = 14,
+    this.shrinkDayNameFontSize = 9,
     this.shrink = false,
     this.locale,
     this.showYears = false,
@@ -65,6 +73,14 @@ class CalendarTimeline extends StatefulWidget {
   final Color? monthColor;
   final Color? dotColor;
   final Color? dayNameColor;
+  final double height;
+  final double width;
+  final double shrinkHeight;
+  final double shrinkWidth;
+  final double fontSize;
+  final double shrinkFontSize;
+  final double dayNameFontSize;
+  final double shrinkDayNameFontSize;
   final bool shrink;
   final String? locale;
   final List<DateTime>? eventDates;
@@ -260,8 +276,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _moveToYearIndex(index);
 
     // Reset month and day index
-    _monthSelectedIndex = null;
-    _daySelectedIndex = null;
+    _monthSelectedIndex = 0;
+    _daySelectedIndex = 0;
 
     // Regenerate months and days
     final date = _years[index];
@@ -442,7 +458,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   Widget _buildDayList() {
     return SizedBox(
       key: const Key('ScrollableDayList'),
-      height: 70,
+      height: widget.shrink ? widget.shrinkHeight : widget.height,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex ?? 0,
@@ -471,6 +487,14 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 showDot: _eventDates?.contains(currentDay) ?? false,
                 dotColor: widget.dotColor,
                 dayNameColor: widget.dayNameColor,
+                height: widget.height,
+                width: widget.width,
+                shrinkHeight: widget.shrinkHeight,
+                shrinkWidth: widget.shrinkWidth,
+                fontSize: widget.fontSize,
+                shrinkFontSize: widget.shrinkFontSize,
+                dayNameFontSize: widget.dayNameFontSize,
+                shrinkDayNameFontSize: widget.shrinkDayNameFontSize,
                 shrink: widget.shrink,
               ),
               if (index == _days.length - 1)
