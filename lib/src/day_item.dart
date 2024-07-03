@@ -12,7 +12,8 @@ class DayItem extends StatelessWidget {
     this.activeDayColor,
     this.activeDayBackgroundColor,
     this.available = true,
-    this.dotsColor,
+    this.showDot = false,
+    this.dotColor,
     this.dayNameColor,
     required this.height,
     required this.width,
@@ -32,7 +33,8 @@ class DayItem extends StatelessWidget {
   final Color? activeDayColor;
   final Color? activeDayBackgroundColor;
   final bool available;
-  final Color? dotsColor;
+  final bool showDot;
+  final Color? dotColor;
   final Color? dayNameColor;
   final double height;
   final double width;
@@ -75,6 +77,16 @@ class DayItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            if (showDot) ...[
+              SizedBox(height: shrink ? 6 : 7),
+              _buildDots(),
+              SizedBox(height: shrink ? 9 : 12),
+            ] else
+              SizedBox(height: shrink ? 20 : 24),
+            Text(
+              dayNumber.toString(),
+              style: isSelected ? selectedStyle : textStyle,
+            ),
             if (isSelected)
               Column(
                 children: [
@@ -115,15 +127,11 @@ class DayItem extends StatelessWidget {
       height: 5,
       width: 5,
       decoration: BoxDecoration(
-        color: dotsColor ?? activeDayColor ?? Colors.white,
+        color: dotColor ?? activeDayColor ?? Colors.white,
         shape: BoxShape.circle,
       ),
     );
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [dot, dot],
-    );
+    return dot;
   }
 
   @override

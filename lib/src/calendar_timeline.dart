@@ -26,7 +26,7 @@ class CalendarTimeline extends StatefulWidget {
     this.activeDayColor,
     this.activeBackgroundDayColor,
     this.monthColor,
-    this.dotsColor,
+    this.dotColor,
     this.dayNameColor,
     this.height = 80,
     this.width = 60,
@@ -39,6 +39,7 @@ class CalendarTimeline extends StatefulWidget {
     this.shrink = false,
     this.locale,
     this.showYears = false,
+    this.eventDates,
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
@@ -70,7 +71,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color? activeDayColor;
   final Color? activeBackgroundDayColor;
   final Color? monthColor;
-  final Color? dotsColor;
+  final Color? dotColor;
   final Color? dayNameColor;
   final double height;
   final double width;
@@ -82,6 +83,7 @@ class CalendarTimeline extends StatefulWidget {
   final double shrinkDayNameFontSize;
   final bool shrink;
   final String? locale;
+  final List<DateTime>? eventDates;
 
   /// If true, it will show a separate row for the years.
   /// It defaults to false
@@ -104,6 +106,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   final List<DateTime> _years = [];
   final List<DateTime> _months = [];
   final List<DateTime> _days = [];
+  List<DateTime>? _eventDates;
   late DateTime _selectedDate;
 
   late String _locale;
@@ -128,6 +131,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _locale = widget.locale ?? Localizations.localeOf(context).languageCode;
     initializeDateFormatting(_locale);
     _selectedDate = widget.initialDate;
+    _eventDates = widget.eventDates;
+    _initializeEventDates();
     if (widget.showYears) {
       _generateYears();
       _selectedYearIndex();
@@ -139,6 +144,13 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _generateDays(_selectedDate);
     _selectedDayIndex();
     _moveToDayIndex(_daySelectedIndex ?? 0);
+  }
+
+  /// This modifies the [_eventDates] to a list of DateTime without the time params
+  /// This is needed for comparison in case the user provides DateTime with time params
+  void _initializeEventDates() {
+    _eventDates =
+        _eventDates?.map((e) => DateTime(e.year, e.month, e.day)).toList();
   }
 
   /// It will populate the [_years] list with the years between firstDate and lastDate
@@ -472,7 +484,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 dayColor: widget.dayColor,
                 activeDayColor: widget.activeDayColor,
                 activeDayBackgroundColor: widget.activeBackgroundDayColor,
-                dotsColor: widget.dotsColor,
+                showDot: _eventDates?.contains(currentDay) ?? false,
+                dotColor: widget.dotColor,
                 dayNameColor: widget.dayNameColor,
                 height: widget.height,
                 width: widget.width,
