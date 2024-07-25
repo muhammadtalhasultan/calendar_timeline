@@ -39,6 +39,7 @@ class CalendarTimeline extends StatefulWidget {
     this.shrink = false,
     this.locale,
     this.showYears = false,
+    this.showDayShortNames = false,
     this.eventDates,
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
@@ -84,6 +85,7 @@ class CalendarTimeline extends StatefulWidget {
   final bool shrink;
   final String? locale;
   final List<DateTime>? eventDates;
+  final bool showDayShortNames;
 
   /// If true, it will show a separate row for the years.
   /// It defaults to false
@@ -496,6 +498,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 dayNameFontSize: widget.dayNameFontSize,
                 shrinkDayNameFontSize: widget.shrinkDayNameFontSize,
                 shrink: widget.shrink,
+                showDayName: widget.showDayShortNames,
               ),
               if (index == _days.length - 1)
                 // Last element to take space to do scroll to left side

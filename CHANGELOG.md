@@ -1,3 +1,8 @@
+## 1.1.4 - 25/07/2024
+
+* Added `showDayShortNames` parameter, to determine if day names should also show for not selected dates
+* Changed order in which `activeDayColor`, `dayNameColor` are applied to day short text, `activeDayColor` now has priority
+
 ## 1.1.3 - 14/03/2023
 
 * Minor updates, Flutter packages update
